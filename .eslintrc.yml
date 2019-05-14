@@ -8,3 +8,4 @@ plugins:
   - prettier
 rules:
   prettier/prettier: error
+  capitalized-comments: 0
