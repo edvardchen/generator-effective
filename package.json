@@ -1,7 +1,7 @@
 {
   "name": "generator-effective",
   "version": "0.0.0",
-  "description": "make package.json and thousands of configs effective",
+  "description": "a opinionated and progressive generator to make package.json and thousands of configs effective",
   "homepage": "https://github.com/edvardchen/generator-effective",
   "author": {
     "name": "edvardchen",
