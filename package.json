@@ -1,8 +1,8 @@
 {
-  "name": "generator-effective-package-config",
+  "name": "generator-effective",
   "version": "0.0.0",
-  "description": "progressive enhancing javascript project",
-  "homepage": "",
+  "description": "make package.json and thousands of configs effective",
+  "homepage": "https://github.com/edvardchen/generator-effective",
   "author": {
     "name": "edvardchen",
     "email": "",
@@ -52,26 +52,10 @@
       "git add"
     ]
   },
-  "eslintConfig": {
-    "extends": [
-      "xo",
-      "prettier"
-    ],
-    "env": {
-      "jest": true,
-      "node": true
-    },
-    "rules": {
-      "prettier/prettier": "error"
-    },
-    "plugins": [
-      "prettier"
-    ]
-  },
   "scripts": {
     "pretest": "eslint .",
     "test": "jest"
   },
-  "repository": "https://github.com/edvardchen/effective-package-config.git",
+  "repository": "https://github.com/edvardchen/generator-effective.git",
   "license": "MIT"
 }

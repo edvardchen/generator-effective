@@ -7,7 +7,9 @@ module.exports = class extends Generator {
   prompting() {
     // Have Yeoman greet the user.
     this.log(
-      yosay(`Welcome to the groovy ${chalk.red('generator-effective-package-config')} generator!`)
+      yosay(
+        `Welcome to the groovy ${chalk.red('generator-effective')} generator!`
+      )
     );
 
     const prompts = [
