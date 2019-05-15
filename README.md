@@ -1,6 +1,6 @@
 # generator-effective [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
 
-> progressive enhancing javascript project
+> a opinionated and progressive generator to make package.json and thousands of configs effective
 
 ## Installation
 
@@ -14,7 +14,7 @@ npm install -g generator-effective
 Then generate your new project:
 
 ```bash
-yo effective-package-config
+yo effective
 ```
 
 ## Getting To Know Yeoman
