@@ -11,30 +11,21 @@ module.exports = class extends Generator {
         `Welcome to the groovy ${chalk.red('generator-effective')} generator!`
       )
     );
-
-    const prompts = [
-      {
-        type: 'confirm',
-        name: 'someAnswer',
-        message: 'Would you like to enable this option?',
-        default: true
-      }
-    ];
-
-    return this.prompt(prompts).then(props => {
-      // To access props later use this.props.someAnswer;
-      this.props = props;
-    });
-  }
-
-  writing() {
-    this.fs.copy(
-      this.templatePath('dummyfile.txt'),
-      this.destinationPath('dummyfile.txt')
+    this.log(
+      `Try ${chalk.green(
+        'yo effetive --help'
+      )} to see all available subgenerators`
     );
   }
 
-  install() {
-    this.installDependencies();
-  }
+  // writing() {
+  //   this.fs.copy(
+  //     this.templatePath('dummyfile.txt'),
+  //     this.destinationPath('dummyfile.txt')
+  //   );
+  // }
+
+  // install() {
+  //   this.installDependencies();
+  // }
 };
