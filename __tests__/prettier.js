@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 'use strict';
 const path = require('path');
 const assert = require('yeoman-assert');
@@ -13,31 +14,46 @@ describe('generator-effective:prettier', () => {
     it('creates files', () => {
       assert.fileContent(
         'package.json',
-        /"*\.\{ts,css,md,js\}": \[\s+"prettier --write",\s+"git add"\s+\]/m
+        /"*\.\{ts,js,json,scss,css,md\}": \[\s+"prettier --write",\s+"git add"\s+\]/m
       );
     });
   });
 
+  function createEslintrc() {
+    const done = this.async();
+    fs.writeFile(path.resolve('./.eslintrc.yml'), '', done);
+  }
+
   describe('integrate with eslint', () => {
-    function createEslintrc() {
-      const done = this.async();
-      fs.writeFile(path.resolve('./.eslintrc'), '', done);
-    }
+    describe('choose eslint to run prettier', () => {
+      beforeAll(() => {
+        return helpers
+          .run(path.join(__dirname, '../generators/prettier'))
+          .withPrompts({
+            formatWay: 1
+          })
+          .inTmpDir(createEslintrc);
+      });
 
-    beforeAll(() => {
-      return helpers
-        .run(path.join(__dirname, '../generators/prettier'))
-        .withPrompts({
-          formatWay: 1
-        })
-        .inTmpDir(createEslintrc);
+      it('creates files', () => {
+        assert.fileContent(
+          'package.json',
+          /"*\.\{ts,js\}": \[\s+"eslint --fix",\s+"git add"\s+\]/m
+        );
+      });
     });
-
-    it('creates files', () => {
-      assert.fileContent(
-        'package.json',
-        /"*\.\{ts,css,md,js\}": \[\s+"eslint --fix",\s+"git add"\s+\]/m
-      );
+    describe('run prettier itself', () => {
+      beforeAll(() => {
+        return helpers
+          .run(path.join(__dirname, '../generators/prettier'))
+          .inTmpDir(createEslintrc);
+      });
+      it('creates files', () => {
+        assert.fileContent(
+          'package.json',
+          /"*\.\{ts,js,json,scss,css,md\}": \[\s+"prettier --write",\s+"git add"\s+\]/m
+        );
+      });
     });
   });
 });

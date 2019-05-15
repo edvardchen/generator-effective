@@ -3,13 +3,17 @@ const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
 const cosmiconfig = require('cosmiconfig');
+const path = require('path');
+const helper = require('../helper');
+const yaml = require('js-yaml');
 
 const formatCommands = ['prettier --write', 'eslint --fix'];
 
 module.exports = class extends Generator {
   initializing() {
     this.composeWith(require.resolve('../lint-staged'));
-    this.findEslintConfig();
+    this.deps = ['prettier'];
+    this._findEslintConfig();
   }
 
   prompting() {
@@ -36,6 +40,7 @@ module.exports = class extends Generator {
       return this.prompt(prompts).then(props => {
         // To access props later use this.props.someAnswer;
         this.props = props;
+        this.formatByEslint = this.props.formatWay === 1;
       });
     }
   }
@@ -48,27 +53,79 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    const format = formatCommands[this.props ? this.props.formatWay : 0];
-    this.fs.extendJSON(this.destinationPath('package.json'), {
-      scripts: {
-        format
-      },
-      'lint-staged': {
-        '*.{ts,css,md,js}': [format, 'git add']
-      }
-    });
+    this._writePkg();
+    this._writeEslintConfig();
   }
 
   install() {
-    this.npmInstall(['prettier'], { 'save-dev': true });
+    this.npmInstall(this.deps, { 'save-dev': true });
   }
 
-  findEslintConfig() {
+  /** search and load eslint config */
+  _findEslintConfig() {
     const root = this.destinationRoot();
     const explorer = cosmiconfig('eslint', {
       ignoreEmptySearchPlaces: false,
       stopDir: root
     });
     this.eslintConfig = explorer.searchSync();
+  }
+
+  /** update package.json */
+  _writePkg() {
+    const format = formatCommands[this.props ? this.props.formatWay : 0];
+    let lintStaged;
+    if (this.formatByEslint) {
+      lintStaged = {
+        '*.{ts,js}': [format, 'git add'],
+        '*.{json,scss,css,md}': [formatCommands[0], 'git add']
+      };
+    } else {
+      lintStaged = {
+        '*.{ts,js,json,scss,css,md}': [format, 'git add']
+      };
+    }
+    this.fs.extendJSON(this.destinationPath('package.json'), {
+      'lint-staged': lintStaged
+    });
+  }
+
+  /** update eslint config */
+  _writeEslintConfig() {
+    if (this.eslintConfig) {
+      const { config = {}, filepath } = this.eslintConfig;
+      if (filepath.endsWith('.js`')) {
+        const basename = path.basename(filepath);
+        this.log(
+          `dont't support to update eslint config with .js extension: ${basename}`
+        );
+        return;
+      }
+
+      config.extends = config.extends || [];
+
+      helper.quickRemove(config.plugins, 'prettier');
+
+      this.deps.push('eslint-config-prettier');
+      if (this.formatByEslint) {
+        this.deps.push('eslint-plugin-prettier');
+        helper.quickRemove(config.extends, 'prettier');
+        config.extends.push('plugin:prettier/recommended');
+      } else if (!config.extends.includes('prettier')) {
+        config.extends.push('prettier');
+      }
+
+      switch (path.extname(filepath)) {
+        case '.yaml':
+        case '.yml': {
+          this.fs.write(filepath, yaml.safeDump(config));
+          break;
+        }
+        case '.json':
+        default:
+          this.fs.writeJSON(filepath, config);
+          break;
+      }
+    }
   }
 };
