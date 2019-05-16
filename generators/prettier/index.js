@@ -3,9 +3,7 @@ const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
 const cosmiconfig = require('cosmiconfig');
-const path = require('path');
 const helper = require('../helper');
-const yaml = require('js-yaml');
 
 const formatCommands = ['prettier --write', 'eslint --fix'];
 
@@ -94,15 +92,10 @@ module.exports = class extends Generator {
   _writeEslintConfig() {
     if (this.eslintConfig) {
       const { config = {}, filepath } = this.eslintConfig;
-      if (filepath.endsWith('.js`')) {
-        const basename = path.basename(filepath);
-        this.log(
-          `dont't support to update eslint config with .js extension: ${basename}`
-        );
-        return;
-      }
 
-      config.extends = config.extends || [];
+      if (!Array.isArray(config.extends)) {
+        config.extends = [];
+      }
 
       helper.quickRemove(config.plugins, 'prettier');
 
@@ -115,17 +108,7 @@ module.exports = class extends Generator {
         config.extends.push('prettier');
       }
 
-      switch (path.extname(filepath)) {
-        case '.yaml':
-        case '.yml': {
-          this.fs.write(filepath, yaml.safeDump(config));
-          break;
-        }
-        case '.json':
-        default:
-          this.fs.writeJSON(filepath, config);
-          break;
-      }
+      helper.writeConfig(this, filepath, config);
     }
   }
 };

@@ -40,6 +40,7 @@ describe('generator-effective:prettier', () => {
           'package.json',
           /"*\.\{ts,js\}": \[\s+"eslint --fix",\s+"git add"\s+\]/m
         );
+        assert.fileContent('.eslintrc.yml', 'plugin:prettier/recommended');
       });
     });
     describe('run prettier itself', () => {
@@ -53,6 +54,7 @@ describe('generator-effective:prettier', () => {
           'package.json',
           /"*\.\{ts,js,json,scss,css,md\}": \[\s+"prettier --write",\s+"git add"\s+\]/m
         );
+        assert.fileContent('.eslintrc.yml', ' prettier\n');
       });
     });
   });
