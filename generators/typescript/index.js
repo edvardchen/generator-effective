@@ -2,8 +2,19 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
+const cosmiconfig = require('cosmiconfig');
+const helper = require('../helper');
 
 module.exports = class extends Generator {
+  initializing() {
+    const explorer = cosmiconfig('eslint', {
+      ignoreEmptySearchPlaces: false,
+      stopDir: this.destinationRoot()
+    });
+    this.userEslintConfig = explorer.searchSync();
+    this.deps = ['typescript', '@types/node'];
+  }
+
   prompting() {
     // Have Yeoman greet the user.
     this.log(
@@ -32,9 +43,24 @@ module.exports = class extends Generator {
       this.templatePath('tsconfig.json'),
       this.destinationPath('tsconfig.json')
     );
+    if (this.userEslintConfig) {
+      const { config = {}, filepath } = this.userEslintConfig;
+      if (!Array.isArray(config.extends)) {
+        config.extends = [];
+      }
+      config.parser = '@typescript-eslint/parser';
+      config.extends.push('plugin:@typescript-eslint/recommended');
+      helper.writeConfig(this, filepath, config);
+    }
   }
 
   install() {
-    this.npmInstall(['typescript', '@types/node'], { 'save-dev': true });
+    if (this.userEslintConfig) {
+      this.deps.push(
+        '@typescript-eslint/parser',
+        '@typescript-eslint/eslint-plugin'
+      );
+    }
+    this.npmInstall(this.deps, { 'save-dev': true });
   }
 };
