@@ -89,9 +89,7 @@ module.exports = class extends Generator {
   /** update eslint config */
   _writeEslintConfig() {
     const config = (this.eslintConfig && this.eslintConfig.config) || {};
-    if (!Array.isArray(config.extends)) {
-      config.extends = [];
-    }
+    helper.castToArray(config, 'extends');
 
     if (this.formatByEslint) {
       // remove prettier from plugins

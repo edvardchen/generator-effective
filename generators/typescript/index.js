@@ -45,9 +45,7 @@ module.exports = class extends Generator {
     );
     if (this.userEslintConfig) {
       const { config = {}, filepath } = this.userEslintConfig;
-      if (!Array.isArray(config.extends)) {
-        config.extends = [];
-      }
+      helper.castToArray(config, 'extends');
       config.parser = '@typescript-eslint/parser';
       config.extends.push('plugin:@typescript-eslint/recommended');
       helper.writeConfig(this, filepath, config);
