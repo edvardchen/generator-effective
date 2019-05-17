@@ -61,7 +61,7 @@ module.exports = class extends Generator {
         '@typescript-eslint/parser'
       );
     }
-    this.npmInstall(this.deps, { 'svae-dev': true });
+    this.npmInstall(this.deps, { 'save-dev': true });
     // this.installDependencies();
   }
 };
