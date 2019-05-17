@@ -28,17 +28,17 @@ module.exports = class extends Generator {
       const prompts = [
         {
           type: 'list',
-          name: 'formatWay',
+          name: 'formatCommand',
           message: 'Which way would you like to format code?',
           choices: formatCommands,
-          default: 0
+          default: formatCommands[0]
         }
       ];
 
       return this.prompt(prompts).then(props => {
         // To access props later use this.props.someAnswer;
         this.props = props;
-        this.formatByEslint = this.props.formatWay === 1;
+        this.formatByEslint = this.props.formatCommand === formatCommands[1];
       });
     }
   }
@@ -71,16 +71,16 @@ module.exports = class extends Generator {
 
   /** update package.json */
   _writePkg() {
-    const format = formatCommands[this.props ? this.props.formatWay : 0];
+    const command = this.props ? this.props.formatCommand : formatCommands[0];
     let lintStaged;
     if (this.formatByEslint) {
       lintStaged = {
-        '*.{ts,js}': [format, 'git add'],
+        '*.{ts,js}': [command, 'git add'],
         '*.{json,scss,css,md}': [formatCommands[0], 'git add']
       };
     } else {
       lintStaged = {
-        '*.{ts,js,json,scss,css,md}': [format, 'git add']
+        '*.{ts,js,json,scss,css,md}': [command, 'git add']
       };
     }
     this.fs.extendJSON(this.destinationPath('package.json'), {

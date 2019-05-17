@@ -30,7 +30,7 @@ describe('generator-effective:prettier', () => {
         return helpers
           .run(path.join(__dirname, '../generators/prettier'))
           .withPrompts({
-            formatWay: 1
+            formatCommand: 'eslint --fix'
           })
           .inTmpDir(createEslintrc);
       });
