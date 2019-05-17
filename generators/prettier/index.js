@@ -24,23 +24,21 @@ module.exports = class extends Generator {
       )
     );
 
-    if (this.eslintConfig) {
-      const prompts = [
-        {
-          type: 'list',
-          name: 'formatCommand',
-          message: 'Which way would you like to format code?',
-          choices: formatCommands,
-          default: formatCommands[0]
-        }
-      ];
+    const prompts = [
+      {
+        type: 'list',
+        name: 'formatCommand',
+        message: 'Which way would you like to format code?',
+        choices: formatCommands,
+        default: formatCommands[0]
+      }
+    ];
 
-      return this.prompt(prompts).then(props => {
-        // To access props later use this.props.someAnswer;
-        this.props = props;
-        this.formatByEslint = this.props.formatCommand === formatCommands[1];
-      });
-    }
+    return this.prompt(prompts).then(props => {
+      // To access props later use this.props.someAnswer;
+      this.props = props;
+      this.formatByEslint = this.props.formatCommand === formatCommands[1];
+    });
   }
 
   configuring() {
@@ -90,25 +88,38 @@ module.exports = class extends Generator {
 
   /** update eslint config */
   _writeEslintConfig() {
-    if (this.eslintConfig) {
-      const { config = {}, filepath } = this.eslintConfig;
+    const config = (this.eslintConfig && this.eslintConfig.config) || {};
+    if (!Array.isArray(config.extends)) {
+      config.extends = [];
+    }
 
-      if (!Array.isArray(config.extends)) {
-        config.extends = [];
-      }
-
+    if (this.formatByEslint) {
+      // remove prettier from plugins
       helper.quickRemove(config.plugins, 'prettier');
+      helper.quickRemove(config.extends, 'prettier');
 
       this.deps.push('eslint-config-prettier');
-      if (this.formatByEslint) {
-        this.deps.push('eslint-plugin-prettier');
-        helper.quickRemove(config.extends, 'prettier');
-        config.extends.push('plugin:prettier/recommended');
-      } else if (!config.extends.includes('prettier')) {
-        config.extends.push('prettier');
-      }
+      this.deps.push('eslint-plugin-prettier');
+      config.extends.push('plugin:prettier/recommended');
 
-      helper.writeConfig(this, filepath, config);
+      if (this.eslintConfig) {
+        helper.writeConfig(this, this.eslintConfig.filepath, config);
+      } else {
+        helper.writeConfig(
+          this,
+          this.destinationPath('./.eslintrc.yml'),
+          config
+        );
+      }
+      return;
+    }
+
+    if (this.eslintConfig) {
+      if (!config.extends.includes('prettier')) {
+        config.extends.push('prettier');
+        this.deps.push('eslint-config-prettier');
+        helper.writeConfig(this, this.eslintConfig.filepath, config);
+      }
     }
   }
 };

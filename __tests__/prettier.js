@@ -43,6 +43,7 @@ describe('generator-effective:prettier', () => {
         assert.fileContent('.eslintrc.yml', 'plugin:prettier/recommended');
       });
     });
+
     describe('run prettier itself', () => {
       beforeAll(() => {
         return helpers
