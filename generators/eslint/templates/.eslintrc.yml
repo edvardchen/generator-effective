@@ -4,6 +4,10 @@ env:
   node: true
 extends:
   - eslint:recommended
+<% if (useTypescriptEslint){ %>
+  - plugin:react/recommended
+  - plugin:@typescript-eslint/recommended
+<% } %>
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly

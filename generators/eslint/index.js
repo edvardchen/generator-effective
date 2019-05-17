@@ -2,14 +2,11 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const cosmiconfig = require('cosmiconfig');
+const helper = require('../helper');
 
 module.exports = class extends Generator {
   initializing() {
-    const explorer = cosmiconfig('eslint', {
-      stopDir: this.destinationRoot()
-    });
-    this.userEslintConfig = explorer.searchSync();
+    this.userEslintConfig = helper.searchConfig(this, 'eslint');
   }
 
   prompting() {
@@ -21,19 +18,51 @@ module.exports = class extends Generator {
         )} generator!`
       )
     );
+    const prompts = [];
+    if (this.fs.exists(this.destinationPath('tsconfig.json'))) {
+      prompts.push({
+        type: 'confirm',
+        message: 'Would you like to integrate Typescript with eslint',
+        name: 'useTypescriptEslint',
+        default: true
+      });
+    }
+    return this.prompt(prompts).then(props => {
+      this.props = props;
+    });
   }
 
   writing() {
+    const { useTypescriptEslint } = this.props;
     if (!this.userEslintConfig) {
-      this.fs.copy(
+      this.fs.copyTpl(
         this.templatePath('.eslintrc.yml'),
-        this.destinationPath('.eslintrc.yml')
+        this.destinationPath('.eslintrc.yml'),
+        { useTypescriptEslint }
       );
+      return;
+    }
+
+    if (this.userEslintConfig) {
+      const { config, filepath } = this.userEslintConfig;
+      helper.castToArray(config, 'extends');
+      config.extends.push(
+        'plugin:react/recommended',
+        'plugin:@typescript-eslint/recommended'
+      );
+      helper.writeConfig(this, filepath, config);
     }
   }
 
   install() {
-    this.npmInstall(['eslint'], { 'svae-dev': true });
+    this.deps = ['eslint'];
+    if (this.props.useTypescriptEslint) {
+      this.deps.push(
+        '@typescript-eslint/eslint-plugin',
+        '@typescript-eslint/parser'
+      );
+    }
+    this.npmInstall(this.deps, { 'svae-dev': true });
     // this.installDependencies();
   }
 };
