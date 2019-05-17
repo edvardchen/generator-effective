@@ -30,6 +30,7 @@ describe('generator-effective:eslint', () => {
       it('creates files', () => {
         assert.fileContent(
           '.eslintrc.yml',
+          '@typescript-eslint/parser',
           'plugin:@typescript-eslint/recommended'
         );
       });

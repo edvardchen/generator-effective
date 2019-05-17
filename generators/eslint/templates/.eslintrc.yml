@@ -3,11 +3,7 @@ env:
   es6: true
   node: true
 extends:
-  - eslint:recommended
-<% if (useTypescriptEslint){ %>
-  - plugin:react/recommended
-  - plugin:@typescript-eslint/recommended
-<% } %>
+  - 'eslint:recommended'
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
@@ -15,3 +11,4 @@ parserOptions:
   ecmaVersion: 2018
   sourceType: module
 rules: {}
+parser: '@typescript-eslint/parser'

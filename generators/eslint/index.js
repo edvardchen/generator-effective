@@ -3,6 +3,7 @@ const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
 const helper = require('../helper');
+const cosmiconfig = require('cosmiconfig');
 
 module.exports = class extends Generator {
   initializing() {
@@ -34,23 +35,21 @@ module.exports = class extends Generator {
 
   writing() {
     const { useTypescriptEslint } = this.props;
-    if (!this.userEslintConfig) {
-      this.fs.copyTpl(
-        this.templatePath('.eslintrc.yml'),
-        this.destinationPath('.eslintrc.yml'),
-        { useTypescriptEslint }
-      );
-      return;
-    }
+    let configData = this.userEslintConfig;
+    let dest = this.userEslintConfig && this.userEslintConfig.filepath;
 
-    if (this.userEslintConfig) {
-      const { config, filepath } = this.userEslintConfig;
+    if (!this.userEslintConfig) {
+      const template = this.templatePath('.eslintrc.yml');
+      dest = this.destinationPath('.eslintrc.yml');
+      this.fs.copy(template, dest);
+      configData = cosmiconfig('eslint').loadSync(template);
+    }
+    if (useTypescriptEslint) {
+      const { config } = configData;
       helper.castToArray(config, 'extends');
-      config.extends.push(
-        'plugin:react/recommended',
-        'plugin:@typescript-eslint/recommended'
-      );
-      helper.writeConfig(this, filepath, config);
+      config.extends.push('plugin:@typescript-eslint/recommended');
+      config.parser = '@typescript-eslint/parser';
+      helper.writeConfig(this, dest, config);
     }
   }
 
