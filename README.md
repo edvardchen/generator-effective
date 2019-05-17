@@ -11,10 +11,11 @@ npm install -g yo
 npm install -g generator-effective
 ```
 
-See all available subgenerators:
+Run one of subgenerators `yo effective:[subgenerator]` like:
 
 ```bash
-yo effective --help
+# init TypeScript for your project
+yo effective:typescript
 ```
 
 ## Subgenerators
@@ -24,6 +25,8 @@ yo effective --help
 - [lint-staged](./generators/lint-staged/README.md) -- Configure project to run lint-staged at git hook `precommit`
 
 - [prettier](./generators/prettier/README.md) -- Configure project to format files by `prettier`
+
+- [eslint](./generators/eslint/README.md) -- Enable eslint and integrate with other tools like typescrip
 
 ## Getting To Know Yeoman
 
