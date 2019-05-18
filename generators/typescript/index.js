@@ -2,16 +2,11 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const cosmiconfig = require('cosmiconfig');
 const helper = require('../helper');
 
 module.exports = class extends Generator {
   initializing() {
-    const explorer = cosmiconfig('eslint', {
-      ignoreEmptySearchPlaces: false,
-      stopDir: this.destinationRoot()
-    });
-    this.userEslintConfig = explorer.searchSync();
+    this.userEslintConfig = helper.searchConfig(this, 'eslint');
     this.deps = ['typescript', '@types/node'];
   }
 

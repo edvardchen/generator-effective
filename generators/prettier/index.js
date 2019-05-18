@@ -2,7 +2,6 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
-const cosmiconfig = require('cosmiconfig');
 const helper = require('../helper');
 
 const formatCommands = ['prettier --write', 'eslint --fix'];
@@ -59,12 +58,7 @@ module.exports = class extends Generator {
 
   /** search and load eslint config */
   _findEslintConfig() {
-    const root = this.destinationRoot();
-    const explorer = cosmiconfig('eslint', {
-      ignoreEmptySearchPlaces: false,
-      stopDir: root
-    });
-    this.eslintConfig = explorer.searchSync();
+    this.eslintConfig = helper.searchConfig(this, 'eslint');
   }
 
   /** update package.json */
