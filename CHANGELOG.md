@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/edvardchen/generator-effective/compare/v0.2.1...v0.3.0) (2019-06-05)
+
+
+### Features
+
+* **pretter:** add trailingComma: es5 ([0ffd9cf](https://github.com/edvardchen/generator-effective/commit/0ffd9cf))
+* strip comments in tsconfig.json ([473a02e](https://github.com/edvardchen/generator-effective/commit/473a02e))
+* **react:** add subgenerator react ([7bc1894](https://github.com/edvardchen/generator-effective/commit/7bc1894))
+* add subgenerator gitignore ([12f4ffd](https://github.com/edvardchen/generator-effective/commit/12f4ffd))
+
+
+
 ### [0.2.1](https://github.com/edvardchen/generator-effective/compare/v0.2.0...v0.2.1) (2019-05-17)
 
 
