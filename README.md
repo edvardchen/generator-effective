@@ -20,13 +20,13 @@ yo effective:typescript
 
 ## Subgenerators
 
-- [typescript](./generators/typescript/README.md) -- Enable TypeScript development enviroment
+- [typescript](./generators/typescript/README.md) -- Enable TypeScript development environment
 
 - [lint-staged](./generators/lint-staged/README.md) -- Configure project to run lint-staged at git hook `precommit`
 
 - [prettier](./generators/prettier/README.md) -- Configure project to format files by `prettier`
 
-- [eslint](./generators/eslint/README.md) -- Enable eslint and integrate with other tools like typescrip
+- [eslint](./generators/eslint/README.md) -- Enable eslint and integrate with other tools like typescript
 
 ## Getting To Know Yeoman
 
