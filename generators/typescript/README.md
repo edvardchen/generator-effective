@@ -1,6 +1,6 @@
 # TypeScript
 
-Enable TypeScript development enviroment
+Enable TypeScript development environment
 
 ## What it does
 
