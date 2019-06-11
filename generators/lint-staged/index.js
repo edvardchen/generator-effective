@@ -19,10 +19,10 @@ module.exports = class extends Generator {
     this.fs.extendJSON(this.destinationPath('package.json'), {
       husky: {
         hooks: {
-          'pre-commit': 'lint-staged'
-        }
+          'pre-commit': 'lint-staged',
+        },
       },
-      'lint-staged': {}
+      'lint-staged': {},
     });
   }
 

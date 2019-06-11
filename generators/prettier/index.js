@@ -4,13 +4,9 @@ const chalk = require('chalk');
 const yosay = require('yosay');
 const helper = require('../helper');
 
-const formatCommands = ['prettier --write', 'eslint --fix'];
-
 module.exports = class extends Generator {
   initializing() {
     this.composeWith(require.resolve('../lint-staged'));
-    this.deps = ['prettier'];
-    this._findEslintConfig();
   }
 
   prompting() {
@@ -22,96 +18,64 @@ module.exports = class extends Generator {
         )} generator!`
       )
     );
-
-    const prompts = [
-      {
-        type: 'list',
-        name: 'formatCommand',
-        message: 'Which way would you like to format code?',
-        choices: formatCommands,
-        default: formatCommands[0]
-      }
-    ];
-
-    return this.prompt(prompts).then(props => {
-      // To access props later use this.props.someAnswer;
-      this.props = props;
-      this.formatByEslint = this.props.formatCommand === formatCommands[1];
-    });
   }
 
   configuring() {
+    const found = helper.searchConfig(this, 'prettier');
     const configPath = this.destinationPath('.prettierrc');
-    if (!this.fs.exists(configPath)) {
+    if (!found) {
       this.fs.copy(this.templatePath('.prettierrc'), configPath);
     }
   }
 
   writing() {
-    this._writePkg();
-    this._writeEslintConfig();
-  }
-
-  install() {
-    this.npmInstall(this.deps, { 'save-dev': true });
-  }
-
-  /** search and load eslint config */
-  _findEslintConfig() {
-    this.eslintConfig = helper.searchConfig(this, 'eslint');
-  }
-
-  /** update package.json */
-  _writePkg() {
-    const command = this.props ? this.props.formatCommand : formatCommands[0];
-    let lintStaged;
-    if (this.formatByEslint) {
-      lintStaged = {
-        '*.{ts,js}': [command, 'git add'],
-        '*.{json,scss,css,md}': [formatCommands[0], 'git add']
-      };
-    } else {
-      lintStaged = {
-        '*.{ts,js,json,scss,css,md}': [command, 'git add']
-      };
-    }
+    const lintStaged = {
+      '*.{ts,tsx,js,json}': ['prettier --write', 'git add'],
+    };
     this.fs.extendJSON(this.destinationPath('package.json'), {
-      'lint-staged': lintStaged
+      devDependencies: {
+        prettier: '^1.18.2',
+      },
+      'lint-staged': lintStaged,
     });
   }
 
-  /** update eslint config */
-  _writeEslintConfig() {
-    const config = (this.eslintConfig && this.eslintConfig.config) || {};
-    helper.castToArray(config, 'extends');
-
-    if (this.formatByEslint) {
-      // remove prettier from plugins
-      helper.quickRemove(config.plugins, 'prettier');
-      helper.quickRemove(config.extends, 'prettier');
-
-      this.deps.push('eslint-config-prettier');
-      this.deps.push('eslint-plugin-prettier');
-      config.extends.push('plugin:prettier/recommended');
-
-      if (this.eslintConfig) {
-        helper.writeConfig(this, this.eslintConfig.filepath, config);
-      } else {
-        helper.writeConfig(
-          this,
-          this.destinationPath('./.eslintrc.yml'),
-          config
-        );
-      }
-      return;
-    }
-
-    if (this.eslintConfig) {
-      if (!config.extends.includes('prettier')) {
-        config.extends.push('prettier');
-        this.deps.push('eslint-config-prettier');
-        helper.writeConfig(this, this.eslintConfig.filepath, config);
-      }
-    }
+  install() {
+    this.npmInstall();
   }
+
+  // /** update eslint config */
+  // _writeEslintConfig() {
+  //   const config = (this.eslintConfig && this.eslintConfig.config) || {};
+  //   helper.castToArray(config, 'extends');
+
+  //   if (this.formatByEslint) {
+  //     // remove prettier from plugins
+  //     helper.quickRemove(config.plugins, 'prettier');
+  //     helper.quickRemove(config.extends, 'prettier');
+
+  //     this.deps.push('eslint-config-prettier');
+  //     this.deps.push('eslint-plugin-prettier');
+  //     config.extends.push('plugin:prettier/recommended');
+
+  //     if (this.eslintConfig) {
+  //       helper.writeConfig(this, this.eslintConfig.filepath, config);
+  //     } else {
+  //       helper.writeConfig(
+  //         this,
+  //         this.destinationPath('./.eslintrc.yml'),
+  //         config
+  //       );
+  //     }
+  //     return;
+  //   }
+
+  //   if (this.eslintConfig) {
+  //     if (!config.extends.includes('prettier')) {
+  //       config.extends.push('prettier');
+  //       this.deps.push('eslint-config-prettier');
+  //       helper.writeConfig(this, this.eslintConfig.filepath, config);
+  //     }
+  //   }
+  // }
 };

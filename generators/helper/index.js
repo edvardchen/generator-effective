@@ -47,7 +47,7 @@ exports.writeConfig = function(generator, filepath, config) {
 exports.searchConfig = function(generator, modulename) {
   const explorer = cosmiconfig(modulename, {
     ignoreEmptySearchPlaces: false,
-    stopDir: generator.destinationRoot()
+    stopDir: generator.destinationRoot(),
   });
   return explorer.searchSync();
 };

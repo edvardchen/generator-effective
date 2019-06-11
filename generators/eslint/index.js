@@ -25,7 +25,7 @@ module.exports = class extends Generator {
         type: 'confirm',
         message: 'Would you like to integrate Typescript with eslint',
         name: 'useTypescriptEslint',
-        default: true
+        default: true,
       });
     }
     return this.prompt(prompts).then(props => {

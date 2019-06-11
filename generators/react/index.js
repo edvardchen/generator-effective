@@ -24,8 +24,8 @@ module.exports = class extends Generator {
         type: 'list',
         name: 'stateManager',
         message: 'Which state management library does your project use?',
-        choices: ['redux', 'mobx']
-      }
+        choices: ['redux', 'mobx'],
+      },
     ];
 
     return this.prompt(prompts).then(props => {
@@ -40,8 +40,8 @@ module.exports = class extends Generator {
     if (usingTS) {
       this.fs.extendJSON(tsconfig, {
         compilerOptions: {
-          jsx: 'react'
-        }
+          jsx: 'react',
+        },
       });
     }
     if (this.userEslintConfig) {
@@ -58,8 +58,8 @@ module.exports = class extends Generator {
           ...config.parserOptions,
           ecmaFeatures: {
             ...(config.parserOptions && config.parserOptions.ecmaFeatures),
-            jsx: true
-          }
+            jsx: true,
+          },
         };
       }
 
