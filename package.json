@@ -58,5 +58,10 @@
     "test": "jest"
   },
   "repository": "https://github.com/edvardchen/generator-effective.git",
-  "license": "MIT"
+  "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
 }

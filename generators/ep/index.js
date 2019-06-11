@@ -1,7 +1,6 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const yosay = require('yosay');
+const helper = require('../helper');
 
 const formatCommands = ['prettier --write', 'eslint --fix'];
 
@@ -12,13 +11,6 @@ module.exports = class extends Generator {
   }
 
   prompting() {
-    // Have Yeoman greet the user.
-    this.log(
-      yosay(
-        `Welcome to the slick ${chalk.red('generator-effective')} generator!`
-      )
-    );
-
     const prompts = [
       {
         type: 'list',
@@ -61,6 +53,6 @@ module.exports = class extends Generator {
   }
 
   install() {
-    this.installDependencies();
+    helper.installDependencies(this);
   }
 };

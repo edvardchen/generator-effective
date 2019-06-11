@@ -1,7 +1,5 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const yosay = require('yosay');
 const helper = require('../helper');
 const cosmiconfig = require('cosmiconfig');
 
@@ -11,14 +9,6 @@ module.exports = class extends Generator {
   }
 
   prompting() {
-    // Have Yeoman greet the user.
-    this.log(
-      yosay(
-        `Welcome to the exquisite ${chalk.red(
-          'generator-effective'
-        )} generator!`
-      )
-    );
     const prompts = [];
     if (this.fs.exists(this.destinationPath('tsconfig.json'))) {
       prompts.push({
@@ -62,6 +52,5 @@ module.exports = class extends Generator {
       );
     }
     this.npmInstall(this.deps, { 'save-dev': true });
-    // this.installDependencies();
   }
 };

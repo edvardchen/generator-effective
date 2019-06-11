@@ -1,22 +1,14 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const yosay = require('yosay');
+const helper = require('../helper');
 
 module.exports = class extends Generator {
-  prompting() {
-    // Have Yeoman greet the user.
-    this.log(
-      yosay(
-        `Welcome to the spectacular ${chalk.red(
-          'generator-effective'
-        )} generator!`
-      )
-    );
-  }
-
   writing() {
     this.fs.extendJSON(this.destinationPath('package.json'), {
+      devDependencies: {
+        husky: '^1.2.0',
+        'lint-staged': '^8.1.0',
+      },
       husky: {
         hooks: {
           'pre-commit': 'lint-staged',
@@ -27,6 +19,6 @@ module.exports = class extends Generator {
   }
 
   install() {
-    this.npmInstall(['husky', 'lint-staged'], { 'save-dev': true });
+    helper.installDependencies(this);
   }
 };

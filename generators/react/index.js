@@ -1,7 +1,5 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const yosay = require('yosay');
 const helper = require('../helper');
 
 module.exports = class extends Generator {
@@ -12,13 +10,6 @@ module.exports = class extends Generator {
   }
 
   prompting() {
-    // Have Yeoman greet the user.
-    this.log(
-      yosay(
-        `Welcome to the superior ${chalk.red('generator-effective')} generator!`
-      )
-    );
-
     const prompts = [
       {
         type: 'list',

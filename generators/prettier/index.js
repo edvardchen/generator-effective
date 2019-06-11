@@ -1,23 +1,10 @@
 'use strict';
 const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const yosay = require('yosay');
 const helper = require('../helper');
 
 module.exports = class extends Generator {
   initializing() {
     this.composeWith(require.resolve('../lint-staged'));
-  }
-
-  prompting() {
-    // Have Yeoman greet the user.
-    this.log(
-      yosay(
-        `Welcome to the incredible ${chalk.red(
-          'generator-effective'
-        )} generator!`
-      )
-    );
   }
 
   configuring() {
@@ -41,7 +28,7 @@ module.exports = class extends Generator {
   }
 
   install() {
-    this.npmInstall();
+    helper.installDependencies(this);
   }
 
   // /** update eslint config */

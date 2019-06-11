@@ -62,3 +62,31 @@ exports.castToArray = function(config, key) {
     config[key] = config[key] === undefined ? [] : [config[key]];
   }
 };
+
+/**
+ * cast non-array property to array
+ * @param {Generator} generator yeoman generator
+ */
+exports.installDependencies = function(generator) {
+  let options = {
+    npm: true,
+  };
+  if (exports.usingYarn(generator)) {
+    options = {
+      yarn: true,
+    };
+  }
+  generator.installDependencies({
+    ...options,
+    bower: false,
+  });
+};
+
+/**
+ * detect user is using yarn or not
+ * @param {Generator} generator yeoman generator
+ * @returns {boolean} result
+ */
+exports.usingYarn = function(generator) {
+  return generator.fs.exists(generator.destinationPath('yarn.lock'));
+};
