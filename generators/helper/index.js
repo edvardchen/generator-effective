@@ -53,6 +53,50 @@ exports.searchConfig = function(generator, modulename) {
 };
 
 /**
+ * seach config from disk and yoeman fs memory
+ * @param {Generator} generator yoeman generator
+ * @param {string} modulename config module name
+ * @param {string} filenameInMemory config module name
+ * @returns {null|CosmiconfigResult} the found config
+ */
+exports.searchConfigExtended = function(
+  generator,
+  modulename,
+  filenameInMemory
+) {
+  // first, search config on dist
+  const result = exports.searchConfig(generator, modulename);
+  if (result) {
+    return result;
+  }
+
+  // then, try to find config in fs memory
+  const filepath = generator.destinationPath(filenameInMemory);
+  const content = generator.fs.read(filepath);
+  if (!content) {
+    // be consistent with cosmiconfig searchSync
+    return null;
+  }
+  let config;
+  switch (path.extname(filenameInMemory)) {
+    case '.yml':
+    case '.yaml': {
+      config = yaml.safeLoad(content);
+      break;
+    }
+    case '.json':
+    default:
+      config = JSON.parse(content);
+      break;
+  }
+  // be consistent with cosmiconfig searchSync
+  return {
+    filepath,
+    config,
+  };
+};
+
+/**
  * cast non-array property to array
  * @param {Object} config config data
  * @param {string} key the property key
@@ -64,7 +108,7 @@ exports.castToArray = function(config, key) {
 };
 
 /**
- * cast non-array property to array
+ * auto choose npm or yarn to install deps
  * @param {Generator} generator yeoman generator
  */
 exports.installDependencies = function(generator) {
