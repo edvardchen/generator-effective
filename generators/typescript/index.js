@@ -3,32 +3,21 @@ const Generator = require('yeoman-generator');
 const helper = require('../helper');
 
 module.exports = class extends Generator {
-  initializing() {
-    this.userEslintConfig = helper.searchConfig(this, 'eslint');
-    this.deps = ['typescript', '@types/node'];
-  }
-
   writing() {
     this.fs.copy(
       this.templatePath('tsconfig.json'),
       this.destinationPath('tsconfig.json')
     );
-    if (this.userEslintConfig) {
-      const { config = {}, filepath } = this.userEslintConfig;
-      helper.castToArray(config, 'extends');
-      config.parser = '@typescript-eslint/parser';
-      config.extends.push('plugin:@typescript-eslint/recommended');
-      helper.writeConfig(this, filepath, config);
-    }
+
+    this.fs.extendJSON(this.destinationPath('package.json'), {
+      devDependencies: {
+        typescript: '^3.5.1',
+        '@types/node': '^12.0.8',
+      },
+    });
   }
 
   install() {
-    if (this.userEslintConfig) {
-      this.deps.push(
-        '@typescript-eslint/parser',
-        '@typescript-eslint/eslint-plugin'
-      );
-    }
-    this.npmInstall(this.deps, { 'save-dev': true });
+    helper.installDependencies(this);
   }
 };
