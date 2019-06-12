@@ -3,12 +3,6 @@ const Generator = require('yeoman-generator');
 const helper = require('../helper');
 
 module.exports = class extends Generator {
-  initializing() {
-    this.deps = ['react', 'react-dom'];
-    this.devDeps = [];
-    this.userEslintConfig = helper.searchConfig(this, 'eslint');
-  }
-
   prompting() {
     const prompts = [
       {
@@ -16,6 +10,7 @@ module.exports = class extends Generator {
         name: 'stateManager',
         message: 'Which state management library does your project use?',
         choices: ['redux', 'mobx'],
+        store: true,
       },
     ];
 
@@ -26,6 +21,36 @@ module.exports = class extends Generator {
   }
 
   writing() {
+    const deps = {
+      react: '^16.8.6',
+      'react-dom': '^16.8.6',
+    };
+    switch (this.props.stateManager) {
+      case 'redux': {
+        Object.assign(deps, {
+          'react-redux': '^7.0.3',
+          redux: '^4.0.1',
+        });
+        break;
+      }
+      case 'mobx': {
+        Object.assign(deps, {
+          mobx: '^4.10.0',
+          'mobx-react': '^6.0.3',
+        });
+        break;
+      }
+      default:
+        break;
+    }
+    const pkgPath = this.destinationPath('package.json');
+
+    this.fs.extendJSON(pkgPath, { dependencies: deps });
+
+    //
+    // ─── TSCONFIG ────────────────────────────────────────────────────
+    //
+
     const tsconfig = this.destinationPath('tsconfig.json');
     const usingTS = this.fs.exists(tsconfig);
     if (usingTS) {
@@ -35,10 +60,21 @@ module.exports = class extends Generator {
         },
       });
     }
-    if (this.userEslintConfig) {
-      this.devDeps.push('eslint-plugin-react');
+    // ─────────────────────────────────────────────────────────────────
 
-      const { config = {}, filepath } = this.userEslintConfig;
+    //
+    // ─── ESLINT ──────────────────────────────────────────────────────
+    //
+    const foundEslintConfig = helper.searchConfig(this, 'eslint');
+
+    if (foundEslintConfig) {
+      this.fs.extendJSON(pkgPath, {
+        devDependencies: {
+          'eslint-plugin-react': '^7.13.0',
+        },
+      });
+
+      const { config = {}, filepath } = foundEslintConfig;
       helper.castToArray(config, 'extends');
 
       // change config
@@ -56,10 +92,10 @@ module.exports = class extends Generator {
 
       helper.writeConfig(this, filepath, config);
     }
+    // ─────────────────────────────────────────────────────────────────
   }
 
   install() {
-    this.npmInstall(this.deps);
-    this.npmInstall(this.devDeps, { 'save-dev': true });
+    helper.installDependencies(this);
   }
 };
