@@ -28,6 +28,12 @@ yo effective:typescript
 
 - [eslint](./generators/eslint/README.md) -- Enable eslint and integrate with other tools like typescript
 
+- [react](./generators/react/README.md) -- Enable React developement enviroment
+
+- `et` -- Compose with **E**SLint and **T**ypesciprt
+- `ep` -- Compose with **E**SLint and **P**rettier
+- `ept` -- Compose with **E**SLint, **P**rettier and **T**ypescript
+
 ## Getting To Know Yeoman
 
 - Yeoman has a heart of gold.
