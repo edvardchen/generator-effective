@@ -30,6 +30,6 @@ module.exports = class extends Generator {
   }
 
   install() {
-    this.installDependencies();
+    helper.installDependencies(this);
   }
 };
