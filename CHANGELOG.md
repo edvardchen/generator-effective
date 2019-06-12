@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/edvardchen/generator-effective/compare/v0.3.0...v1.0.0) (2019-06-12)
+
+
+### Features
+
+* add subgenerator ept ([e765072](https://github.com/edvardchen/generator-effective/commit/e765072))
+* add subgenerator et, eslint-typescript ([8bbe741](https://github.com/edvardchen/generator-effective/commit/8bbe741))
+* **ep:** subgenerator ep configure prettier in eslint config ([6e28899](https://github.com/edvardchen/generator-effective/commit/6e28899))
+* add subgenerator eslint-prettier ([db9221a](https://github.com/edvardchen/generator-effective/commit/db9221a))
+
+
+
 ## [0.3.0](https://github.com/edvardchen/generator-effective/compare/v0.2.1...v0.3.0) (2019-06-05)
 
 
