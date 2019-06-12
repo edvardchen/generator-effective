@@ -2,7 +2,7 @@
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const { exec } = require('child_process');
+// const { exec } = require('child_process');
 
 describe('generator-effective:ep', () => {
   describe('format by prettier', () => {
@@ -17,20 +17,23 @@ describe('generator-effective:ep', () => {
         },
       });
       assert.noFileContent('package.json', /eslint-plugin-prettier/);
+      assert.fileContent('.eslintrc.yml', /- prettier/);
+    });
+
+    it('contains prettier --write', () => {
+      assert.fileContent('package.json', /prettier --write/);
     });
   });
 
   describe('format by eslint', () => {
     beforeAll(() => {
-      return helpers
-        .run(path.join(__dirname, '../generators/ep'))
-        .withPrompts({
-          formatCommand: 'eslint --fix',
-        })
-        .inTmpDir(function() {
-          const done = this.async();
-          exec('npm init -y', done);
-        });
+      return helpers.run(path.join(__dirname, '../generators/ep')).withPrompts({
+        formatCommand: 'eslint --fix',
+      });
+      // .inTmpDir(function() {
+      //   const done = this.async();
+      //   exec('npm init -y', done);
+      // });
     });
 
     it('contains eslint-plugin-prettier', () => {
@@ -40,6 +43,7 @@ describe('generator-effective:ep', () => {
           'eslint-plugin-prettier': /.*/,
         },
       });
+      assert.fileContent('.eslintrc.yml', /plugin:prettier\/recommended/);
     });
 
     it('dont contain prettier --write', () => {

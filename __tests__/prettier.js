@@ -3,7 +3,7 @@
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const fs = require('fs');
+// const fs = require('fs');
 
 describe('generator-effective:prettier', () => {
   describe('blank', () => {

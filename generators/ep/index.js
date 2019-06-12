@@ -1,5 +1,6 @@
 'use strict';
 const Generator = require('yeoman-generator');
+const yaml = require('js-yaml');
 const helper = require('../helper');
 
 const formatCommands = ['prettier --write', 'eslint --fix'];
@@ -7,7 +8,7 @@ const formatCommands = ['prettier --write', 'eslint --fix'];
 module.exports = class extends Generator {
   initializing() {
     this.composeWith(require.resolve('../prettier'));
-    // this.composeWith(require.resolve('../eslint'));
+    this.composeWith(require.resolve('../eslint'));
   }
 
   prompting() {
@@ -41,15 +42,59 @@ module.exports = class extends Generator {
   }
 
   conflicts() {
-    const pkgFile = this.destinationPath('package.json');
+    if (this.formatByEslint) {
+      const pkgFile = this.destinationPath('package.json');
+      //
+      // ─── CHANGE FORMAT COMMAND ───────────────────────────────────────
+      //
+      const pkgConent = this.fs.read(pkgFile);
+      this.fs.write(
+        pkgFile,
+        pkgConent.replace(formatCommands[0], formatCommands[1])
+      );
+      // ─────────────────────────────────────────────────────────────────
+    }
+
     //
-    // ─── CHANGE FORMAT COMMAND ───────────────────────────────────────
+    // ─── SET PRETTIER IN ESLINT CONFIG ───────────────────────────────
     //
-    const pkgConent = this.fs.read(pkgFile);
-    this.fs.write(
-      pkgFile,
-      pkgConent.replace(formatCommands[0], formatCommands[1])
+
+    // config path in yeoman fs memory
+    // we should konw FILENAME of eslint config that added by eslint subgenerator
+    const configPathInMemory = this.destinationPath('.eslintrc.yml');
+
+    // config found on disk
+    const configFoundOnDisk = helper.searchConfig(this, 'eslint');
+
+    let config;
+    if (configFoundOnDisk) {
+      config = configFoundOnDisk.config;
+    } else {
+      // eslint config not found on disk
+      // get config from memory
+      const content = this.fs.read(configPathInMemory);
+      config = yaml.safeLoad(content);
+    }
+
+    // const { config } = eslintConfig;
+    helper.castToArray(config, 'extends');
+
+    if (this.formatByEslint) {
+      // remove prettier from plugins
+      helper.quickRemove(config.plugins, 'prettier');
+      helper.quickRemove(config.extends, 'prettier');
+
+      config.extends.push('plugin:prettier/recommended');
+    } else {
+      config.extends.push('prettier');
+    }
+
+    helper.writeConfig(
+      this,
+      configFoundOnDisk ? configFoundOnDisk.filepath : configPathInMemory,
+      config
     );
+    // ─────────────────────────────────────────────────────────────────
   }
 
   install() {
