@@ -78,7 +78,7 @@ module.exports = class extends Generator {
       helper.castToArray(config, 'extends');
 
       // change config
-      config.extends.push('plugin:react/recommended');
+      config.extends.unshift('plugin:react/recommended');
       if (!usingTS) {
         // not using TS
         config.parserOptions = {

@@ -25,7 +25,7 @@ module.exports = class extends Generator {
       '.eslintrc.yml'
     );
     helper.castToArray(config, 'extends');
-    config.extends.push('plugin:@typescript-eslint/recommended');
+    config.extends.unshift('plugin:@typescript-eslint/recommended');
     helper.writeConfig(this, filepath, config);
   }
 
