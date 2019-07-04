@@ -6,6 +6,7 @@
     "sourceMap": true,
     "strict": true,
     "noUnusedLocals": true,
+    "noImplicitAny": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "allowUnreachableCode": false,
