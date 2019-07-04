@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/edvardchen/generator-effective/compare/v1.0.0...v1.1.0) (2019-07-04)
+
+
+### Bug Fixes
+
+* add eslint rule rather than prettier related at the head ([2d0881a](https://github.com/edvardchen/generator-effective/commit/2d0881a))
+
+
+### Features
+
+* **ts:** set noImplicitAny true ([8e3adbb](https://github.com/edvardchen/generator-effective/commit/8e3adbb))
+* **typescript:** set allowSyntheticDefaultImports and moduleResolution ([d198c5a](https://github.com/edvardchen/generator-effective/commit/d198c5a))
+
+
+
 ## [1.0.0](https://github.com/edvardchen/generator-effective/compare/v0.3.0...v1.0.0) (2019-06-12)
 
 
