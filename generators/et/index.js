@@ -26,6 +26,21 @@ module.exports = class extends Generator {
     );
     helper.castToArray(config, 'extends');
     config.extends.unshift('plugin:@typescript-eslint/recommended');
+
+    config.rules = config.rules || {};
+    config.rules = {
+      ...config.rules,
+      '@typescript-eslint/prefer-interface': 0,
+      '@typescript-eslint/explicit-function-return-type': [
+        1,
+        { allowExpressions: true, allowTypedFunctionExpressions: true },
+      ],
+      '@typescript-eslint/no-unused-vars': [
+        1,
+        { argsIgnorePattern: '^_|ignore' },
+      ],
+    };
+
     helper.writeConfig(this, filepath, config);
   }
 
