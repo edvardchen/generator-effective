@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/edvardchen/generator-effective/compare/v1.1.0...v1.2.0) (2019-07-23)
+
+
+### Bug Fixes
+
+* audit fix, change @commitlint/cli to 8.1.0 ([42d2b3f](https://github.com/edvardchen/generator-effective/commit/42d2b3f))
+
+
+### Features
+
+* **et:** add some typescript-eslint rules ([38e60b4](https://github.com/edvardchen/generator-effective/commit/38e60b4))
+* **et:** enhance no-unused-vars for typescript project ([30d09d9](https://github.com/edvardchen/generator-effective/commit/30d09d9))
+* add subgenerator commitlint ([84c162e](https://github.com/edvardchen/generator-effective/commit/84c162e))
+* **ts:** default target is esnext ([78d8baa](https://github.com/edvardchen/generator-effective/commit/78d8baa))
+* finish app generator ([98c0d69](https://github.com/edvardchen/generator-effective/commit/98c0d69))
+* run eslint on staged files ([284b26b](https://github.com/edvardchen/generator-effective/commit/284b26b))
+
+
+
 ## [1.1.0](https://github.com/edvardchen/generator-effective/compare/v1.0.0...v1.1.0) (2019-07-04)
 
 
