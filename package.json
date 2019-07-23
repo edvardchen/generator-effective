@@ -11,11 +11,11 @@
   "files": [
     "generators"
   ],
-  "main": "generators/index.js",
   "keywords": [
     "javascript",
     "npm",
     "progressive",
+    "effective",
     "yeoman-generator"
   ],
   "devDependencies": {
