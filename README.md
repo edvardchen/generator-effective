@@ -20,15 +20,18 @@ yo effective:typescript
 
 ## Subgenerators
 
+- [commitlint](./generators/commitlint/README.md) -- Add commitlint
+- [eslint](./generators/eslint/README.md) -- Enable eslint
+
+* [lint-staged](./generators/lint-staged/README.md) -- Configure project to run lint-staged at git hook `precommit`
+
+* [prettier](./generators/prettier/README.md) -- Configure project to format files by `prettier`
+
 - [typescript](./generators/typescript/README.md) -- Enable TypeScript development environment
 
-- [lint-staged](./generators/lint-staged/README.md) -- Configure project to run lint-staged at git hook `precommit`
+* [react](./generators/react/README.md) -- Enable React developement enviroment
 
-- [prettier](./generators/prettier/README.md) -- Configure project to format files by `prettier`
-
-- [eslint](./generators/eslint/README.md) -- Enable eslint and integrate with other tools like typescript
-
-- [react](./generators/react/README.md) -- Enable React developement enviroment
+### Composite subgenerators
 
 - `et` -- Compose with **E**SLint and **T**ypesciprt
 - `ep` -- Compose with **E**SLint and **P**rettier

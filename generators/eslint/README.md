@@ -1,6 +1,6 @@
 # ESLint
 
-Enable eslint and integrate with other tools like TypeScript
+Enable eslint
 
 ## What it does
 
