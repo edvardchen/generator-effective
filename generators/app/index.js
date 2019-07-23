@@ -4,17 +4,18 @@ const chalk = require('chalk');
 const yosay = require('yosay');
 
 module.exports = class extends Generator {
+  initializing() {
+    this.composeWith(require.resolve('../ept'));
+    this.composeWith(require.resolve('../commitlint'));
+    this.composeWith(require.resolve('../gitignore'));
+  }
+
   prompting() {
     // Have Yeoman greet the user.
     this.log(
       yosay(
         `Welcome to the groovy ${chalk.red('generator-effective')} generator!`
       )
-    );
-    this.log(
-      `Try ${chalk.green(
-        'yo effetive --help'
-      )} to see all available subgenerators`
     );
   }
 
