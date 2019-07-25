@@ -25,7 +25,17 @@ module.exports = class extends Generator {
       '.eslintrc.yml'
     );
     helper.castToArray(config, 'extends');
-    config.extends.unshift('plugin:@typescript-eslint/recommended');
+
+    const tsRecomm = 'plugin:@typescript-eslint/recommended';
+
+    const firstPrettier = config.extends.findIndex(item =>
+      item.startsWith('prettier')
+    );
+    if (firstPrettier < 0) {
+      config.extends.push(tsRecomm);
+    } else {
+      config.extends.splice(firstPrettier, 0, tsRecomm);
+    }
 
     config.rules = config.rules || {};
     config.rules = {

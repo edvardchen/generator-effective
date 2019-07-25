@@ -4,8 +4,8 @@ const helper = require('../helper');
 
 module.exports = class extends Generator {
   initializing() {
-    this.composeWith(require.resolve('../ep'));
     this.composeWith(require.resolve('../et'));
+    this.composeWith(require.resolve('../ep'));
   }
 
   writing() {}
