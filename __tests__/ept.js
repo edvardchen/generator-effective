@@ -14,5 +14,9 @@ describe('generator-effective:ept', () => {
 
   it('change prettier eslint rule', () => {
     assert.fileContent('.eslintrc.yml', /prettier\/@typescript-eslint/);
+    assert.fileContent(
+      '.eslintrc.yml',
+      'plugin:@typescript-eslint/recommended'
+    );
   });
 });

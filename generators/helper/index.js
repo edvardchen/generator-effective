@@ -66,12 +66,10 @@ exports.searchConfigExtended = function(
 ) {
   // first, search config on dist
   const result = exports.searchConfig(generator, modulename);
-  if (result) {
-    return result;
-  }
 
-  // then, try to find config in fs memory
-  const filepath = generator.destinationPath(filenameInMemory);
+  // then, load through yoeman memory fs
+  const filepath =
+    (result && result.filepath) || generator.destinationPath(filenameInMemory);
   const content = generator.fs.read(filepath);
   if (!content) {
     // be consistent with cosmiconfig searchSync
