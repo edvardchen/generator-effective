@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://github.com/edvardchen/generator-effective/compare/v1.3.1...v1.3.2) (2019-07-27)
+
+
+### Bug Fixes
+
+* fix eslint config merge error ([d87257b](https://github.com/edvardchen/generator-effective/commit/d87257b))
+
+
+
 ### [1.3.1](https://github.com/edvardchen/generator-effective/compare/v1.3.0...v1.3.1) (2019-07-26)
 
 
