@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/edvardchen/generator-effective/compare/v1.3.2...v1.4.0) (2019-07-31)
+
+
+### Features
+
+* **et:** configure no-parameter-properties and explicit-member-accessibility ([388f124](https://github.com/edvardchen/generator-effective/commit/388f124))
+* **typescript:** prompt user to choose compile target ([80822be](https://github.com/edvardchen/generator-effective/commit/80822be))
+
+
+
 ### [1.3.2](https://github.com/edvardchen/generator-effective/compare/v1.3.1...v1.3.2) (2019-07-27)
 
 
