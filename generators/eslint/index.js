@@ -1,5 +1,5 @@
 'use strict';
-const Generator = require('yeoman-generator');
+const Generator = require('../Base');
 const helper = require('../helper');
 
 module.exports = class extends Generator {
@@ -25,6 +25,6 @@ module.exports = class extends Generator {
   }
 
   install() {
-    helper.installDependencies(this);
+    super.install();
   }
 };

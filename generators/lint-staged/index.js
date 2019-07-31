@@ -1,6 +1,5 @@
 'use strict';
-const Generator = require('yeoman-generator');
-const helper = require('../helper');
+const Generator = require('../Base');
 
 module.exports = class extends Generator {
   writing() {
@@ -19,6 +18,6 @@ module.exports = class extends Generator {
   }
 
   install() {
-    helper.installDependencies(this);
+    super.install();
   }
 };
