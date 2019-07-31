@@ -1,0 +1,10 @@
+{
+  "delay": "2000",
+  "ignore": [".git", "node_modules/**/node_modules"],
+  "verbose": true,
+  "watch": ["src/"],
+  "env": {
+    "PORT": 51200
+  },
+  "ext": "ts,json"
+}
