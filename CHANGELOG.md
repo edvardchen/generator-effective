@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/edvardchen/generator-effective/compare/v1.5.0...v1.6.0) (2019-07-31)
+
+
+### Bug Fixes
+
+* **nodemon:** enhance ignore in nodemon.json ([234265f](https://github.com/edvardchen/generator-effective/commit/234265f))
+
+
+### Features
+
+* add nodemon subgenerator ([9e8ced7](https://github.com/edvardchen/generator-effective/commit/9e8ced7))
+
+
+
 ## [1.5.0](https://github.com/edvardchen/generator-effective/compare/v1.4.0...v1.5.0) (2019-07-31)
 
 
