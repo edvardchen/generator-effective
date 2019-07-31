@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/edvardchen/generator-effective/compare/v1.4.0...v1.5.0) (2019-07-31)
+
+
+### Features
+
+* add ej ([aebcb8c](https://github.com/edvardchen/generator-effective/commit/aebcb8c))
+* add jest subgenerator ([00d0b56](https://github.com/edvardchen/generator-effective/commit/00d0b56))
+* add jt ([6a32ec0](https://github.com/edvardchen/generator-effective/commit/6a32ec0))
+
+
+
 ## [1.4.0](https://github.com/edvardchen/generator-effective/compare/v1.3.2...v1.4.0) (2019-07-31)
 
 
