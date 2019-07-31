@@ -2,11 +2,33 @@
 const Generator = require('yeoman-generator');
 const helper = require('../helper');
 
+const choices = ['Node.js', 'browser'];
 module.exports = class extends Generator {
+  initializing() {
+    this.props = {};
+  }
+
+  prompting() {
+    const prompts = [
+      {
+        type: 'list',
+        name: 'target',
+        message: 'Which target should TypeScript compile to',
+        choices,
+        default: choices[0],
+      },
+    ];
+
+    return this.prompt(prompts).then(props => {
+      this.props = props;
+    });
+  }
+
   writing() {
-    this.fs.copy(
+    this.fs.copyTpl(
       this.templatePath('tsconfig.json'),
-      this.destinationPath('tsconfig.json')
+      this.destinationPath('tsconfig.json'),
+      this.props
     );
 
     this.fs.extendJSON(this.destinationPath('package.json'), {

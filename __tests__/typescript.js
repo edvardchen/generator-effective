@@ -12,6 +12,30 @@ describe('generator-effective:typescript', () => {
 
     it('creates files', () => {
       assert.file(['tsconfig.json']);
+      assert.jsonFileContent('tsconfig.json', {
+        compilerOptions: {
+          target: 'esnext',
+          declaration: true,
+        },
+      });
+    });
+  });
+
+  describe('target browser', () => {
+    beforeAll(() => {
+      return helpers.run(generatorPath).withPrompts({
+        target: 'browser',
+      });
+    });
+
+    it('creates files', () => {
+      assert.file(['tsconfig.json']);
+      assert.jsonFileContent('tsconfig.json', {
+        compilerOptions: { target: 'es6' },
+      });
+      assert.noJsonFileContent('tsconfig.json', {
+        compilerOptions: { declaration: true },
+      });
     });
   });
 });

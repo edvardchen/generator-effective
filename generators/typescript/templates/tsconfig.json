@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "<%= target === 'Node.js' ? 'esnext' : 'es6' %>",
     "module": "commonjs",
     "lib": ["es2018", "dom"],
+    <% if ( target === 'Node.js'){ %>
+    "declaration": true,
+    <% } %>
     "sourceMap": true,
     "strict": true,
     "noUnusedLocals": true,
