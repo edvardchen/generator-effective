@@ -16,4 +16,8 @@ module.exports = class extends Generator {
       this.destinationPath('jest.config.js')
     );
   }
+
+  install() {
+    super.install();
+  }
 };

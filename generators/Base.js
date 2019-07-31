@@ -6,6 +6,7 @@ module.exports = class extends Generator {
     this.installDependencies({
       npm: true,
       bower: false,
+      skipMessage: true,
     });
   }
 };
