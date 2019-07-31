@@ -1,6 +1,6 @@
 {
   "delay": "2000",
-  "ignore": [".git", "node_modules/**/node_modules"],
+  "ignore": [".git", "node_modules", ".tmp/", "lib"],
   "verbose": true,
   "watch": ["src/"],
   "env": {
