@@ -10,6 +10,14 @@ describe('generator-effective:grpc', () => {
       const context = helpers
         .run(path.join(__dirname, '../generators/grpc'))
         .inTmpDir(function() {
+          // console.log(dir);
+          fs.mkdirSync('src');
+          fs.writeFile(
+            'src/index.ts',
+            `/* BEGIN GRPC IMPORT */\n/* END */\n` +
+              `/* BEGIN ADD SERVICE */\nserver.addService(GreeterService, { sayHello });\n/* END */\n`,
+            this.async()
+          );
           fs.writeFile('tsconfig.json', '{}', this.async());
         })
         .withPrompts({
@@ -36,11 +44,24 @@ describe('generator-effective:grpc', () => {
           item => `src/static_codegen/${item}`
         )
       );
+    });
 
-      assert.file(['src/helloworld/sayHello.ts']);
+    it('generate server method implementation templates', () => {
+      assert.file(['src/Greeter/sayHello.ts']);
       assert.fileContent(
-        'src/helloworld/sayHello.ts',
+        'src/Greeter/sayHello.ts',
         'export default function sayHello'
+      );
+    });
+
+    it('import methods', () => {
+      assert.fileContent(
+        'src/index.ts',
+        "import sayHello from './Greeter/sayHello';"
+      );
+      assert.fileContent(
+        'src/index.ts',
+        "import { GreeterService } from './static_codegen/helloworld_grpc_pb';"
       );
     });
   });

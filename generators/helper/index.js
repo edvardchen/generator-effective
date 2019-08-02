@@ -132,3 +132,14 @@ exports.installDependencies = function(generator) {
 exports.usingYarn = function(generator) {
   return generator.fs.exists(generator.destinationPath('yarn.lock'));
 };
+
+/**
+ * relative path with dot slash
+ * @param {string} from source directory
+ * @param {string} to target directory
+ * @returns {string} relative path
+ */
+exports.relative = function(from, to) {
+  const result = path.relative(from, to);
+  return result.startsWith('../') ? result : `./${result}`;
+};

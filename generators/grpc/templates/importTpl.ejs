@@ -1,0 +1,3 @@
+import { <%= serviceName %>Service } from '<%= pbDir %>/<%= proto  %>_grpc_pb';
+<% methods.map(method=>{ %>
+import <%= method %> from './<%= serviceName %>/<%= method %>';<% }) %>

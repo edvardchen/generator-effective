@@ -7,8 +7,10 @@ const { spawn } = require('child_process');
 const yosay = require('yosay');
 const chalk = require('chalk');
 const pbLoader = require('@grpc/proto-loader');
+const ejs = require('ejs');
 
 const Generator = require('../Base');
+const helper = require('../helper');
 
 const STATIC = 'static';
 const DYNAMIC = 'dynamic';
@@ -65,56 +67,133 @@ function globalInstall(pkg) {
 }
 
 /**
+ * @param {ServiceDefinition} service service definition
+ * @param {string} options.proto proto name
+ * @param {string} options.implementationDir implementation directory
+ */
+function createSingleMethod(
+  {
+    originalName: method,
+    requestType: {
+      type: { name: requestType },
+    },
+    responseType: {
+      type: { name: responseType },
+    },
+    requestStream,
+    responseStream,
+  },
+  { proto, implementationDir }
+) {
+  if (!requestStream && !responseStream) {
+    const relatedPath = path.relative(implementationDir, this.props.outDir);
+    this.fs.copyTpl(
+      this.templatePath('unaryCall.ts'),
+      this.destinationPath(`${implementationDir}/${method}.ts`),
+      {
+        pbPath: `${relatedPath}/${proto}_pb`,
+        requestType,
+        responseType,
+        method,
+      }
+    );
+  }
+}
+
+/**
+ * @this {Generator}
+ */
+function createMethodFiles({
+  serviceDef,
+  serviceName,
+  proto,
+  implementationDir,
+}) {
+  const methods = [];
+  Object.values(serviceDef).forEach(item => {
+    const method = item.originalName;
+    methods.push(method);
+
+    createSingleMethod.call(this, item, {
+      serviceName,
+      proto,
+      implementationDir,
+    });
+  });
+
+  const importStatements = ejs.render(
+    this.fs.read(this.templatePath('importTpl.ejs')),
+    {
+      proto,
+      methods,
+      serviceName,
+      pbDir: helper.relative('src', this.props.outDir),
+    }
+  );
+
+  this.props.imports.push(importStatements);
+
+  this.props.addServiceStatements.push(
+    `server.addService(${serviceName}Service, {${methods.join(',')}})`
+  );
+}
+
+/**
  * generate server implementation templates
  * @this Generator
  * @param {string[]} protos proto files
  */
 function generateImplementationTemplates(protos) {
   const protoDir = this.destinationPath(this.props.protoDir);
-  // const outDir = this.destinationPath(this.props.outDir);
-  protos.forEach(item => {
-    const serviceName = item.substring(0, item.indexOf('.proto'));
-    const serverDir = `src/${serviceName}`;
-    // create server directory
-    mkdirp(this.destinationPath(serverDir));
 
-    const def = pbLoader.loadSync(path.join(protoDir, item));
+  const entryFile = this.destinationPath('src/index.ts');
+  this.props.imports = [];
+  this.props.addServiceStatements = [];
 
-    Object.values(def).forEach(item => {
-      if (item.type) {
+  protos.forEach(proto => {
+    const def = pbLoader.loadSync(path.join(protoDir, proto));
+
+    for (let [key, serviceOrMessage] of Object.entries(def)) {
+      if (serviceOrMessage.type) {
         // Message
-        return;
+        break;
       }
 
-      Object.values(item).forEach(
-        ({
-          originalName,
-          requestType: {
-            type: { name: requestType },
-          },
-          responseType: {
-            type: { name: responseType },
-          },
-          requestStream,
-          responseStream,
-        }) => {
-          if (!requestStream && !responseStream) {
-            const relatedPath = path.relative(serverDir, this.props.outDir);
-            this.fs.copyTpl(
-              this.templatePath('unaryCall.ts'),
-              this.destinationPath(`${serverDir}/${originalName}.ts`),
-              {
-                pbPath: `${relatedPath}/${serviceName}_pb`,
-                requestType,
-                responseType,
-                method: originalName,
-              }
-            );
-          }
-        }
-      );
-    });
+      // don't create nested directory. Just the service directory
+      const serviceName = key.split('.').pop();
+      const implementationDir = `src/${serviceName}`;
+
+      //
+      // ─── GENERATE SERVER METHOD IMPLEMENTATION ───────────────────────
+      //
+
+      createMethodFiles.call(this, {
+        proto: proto.substring(0, proto.indexOf('.proto')),
+        serviceDef: serviceOrMessage,
+        serviceName,
+        implementationDir,
+      });
+      // ─────────────────────────────────────────────────────────────────
+    }
   });
+
+  if (this.fs.exists(entryFile)) {
+    let content = this.fs.read(entryFile);
+
+    // inject import statements
+    content = content.replace(
+      /(\/\* BEGIN GRPC IMPORT \*\/)(\s+)[\s\S]*?(\/\* END \*\/)/m,
+      `$1$2${this.props.imports.join('$2')}$2$3`
+    );
+
+    // inject addService statements
+    content = content.replace(
+      /(\/\* BEGIN ADD SERVICE \*\/)(\s+)[\s\S]*?(\/\* END \*\/)/m,
+      `$1$2${this.props.addServiceStatements.join('$2')}$2$3`
+    );
+
+    this.fs.write(entryFile, content);
+  }
 }
 
 module.exports = class extends Generator {
