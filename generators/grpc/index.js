@@ -3,6 +3,9 @@ const path = require('path');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const globby = require('globby');
+const { spawn } = require('child_process');
+const yosay = require('yosay');
+const chalk = require('chalk');
 
 const Generator = require('../Base');
 
@@ -10,24 +13,55 @@ const STATIC = 'static';
 const DYNAMIC = 'dynamic';
 const codegens = [STATIC, DYNAMIC];
 
-// function getPluginPath() {
-//   return new Promise(resolve => {
-//     const process = this.spawnCommand(
-//       'which',
-//       ['grpc_tools_node_protoc_plugin'],
-//       {
-//         stdio: 'pipe',
-//       }
-//     );
-//     let pluginPath = '';
-//     process.stdout.on('data', message => {
-//       pluginPath = message.toString();
-//     });
-//     process.stdout.on('close', () => {
-//       resolve(pluginPath);
-//     });
-//   });
-// }
+/**
+ * which program in Node.js
+ * @param {string} program binary file
+ * @returns {Promise<string>} program path
+ */
+function which(program) {
+  const process = spawn('which', [program]);
+  return new Promise(resolve => {
+    let result;
+    process.stdout.on('data', message => {
+      result = message.toString();
+    });
+    process.stdout.on('close', () => {
+      resolve(result);
+    });
+  });
+}
+
+/**
+ * install global package
+ * @param {string} pkg package name
+ * @returns {Promise<void>} void
+ */
+function globalInstall(pkg) {
+  this.log(
+    yosay(
+      `${pkg} not found. Auto install for you.\n    ${chalk.yellow(
+        `npm i -g ${pkg}`
+      )}`
+    )
+  );
+  return new Promise((resolve, reject) => {
+    const child = spawn('npm', ['i', '-g', pkg], {
+      stdio: 'inherit',
+    });
+
+    child.on('exit', code => {
+      if (code !== 0) {
+        this.log(
+          `Failed to install. You should install by yourself: ${chalk.yellow(
+            `npm i -g ${pkg}`
+          )}`
+        );
+        return reject(code);
+      }
+      resolve();
+    });
+  });
+}
 
 module.exports = class extends Generator {
   prompting() {
@@ -98,23 +132,42 @@ module.exports = class extends Generator {
         let { outDir } = this.props;
         mkdirp(outDir);
         outDir = this.destinationPath(outDir);
-        // grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./static_codegen/ --grpc_out=./static_codegen --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` protos/helloworld.proto
-        const binPath = path.join(
-          __dirname,
-          '../../node_modules/.bin/grpc_tools_node_protoc'
-        );
-        this.spawnCommandSync(
-          binPath,
-          [
+
+        const done = this.async();
+
+        (async () => {
+          if (!(await which('grpc_tools_node_protoc'))) {
+            await globalInstall.call(this, 'grpc-tools');
+          }
+
+          if (!(await which('protoc-gen-ts'))) {
+            await globalInstall.call(this, 'ts-protoc-gen');
+          }
+
+          // grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./static_codegen/ --grpc_out=./static_codegen --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` protos/helloworld.proto
+          const args = [
             `--js_out=import_style=commonjs,binary:${outDir}`,
+            `--ts_out=${outDir}`,
             `--grpc_out=${outDir}`,
-            // `--plugin='protoc-gen-grpc=${pluginPath}'`,
+            // `--plugin="protoc-gen-grpc=${pluginPath}"`,
+            // '--plugin="protoc-gen-ts=${pluginPath}"',
             ...globby
               .sync(protoDir + '/**/*.proto')
               .map(item => path.basename(item)),
-          ],
-          { cwd: protoDir, stdio: 'inherit' }
-        );
+          ];
+
+          await new Promise((resolve, reject) => {
+            const child = spawn('grpc_tools_node_protoc', args, {
+              cwd: protoDir,
+              stdio: 'inherit',
+            });
+            child.on('error', reject);
+            child.on('close', code => {
+              if (code === 0) resolve();
+              else reject(code);
+            });
+          });
+        })().finally(done);
       } else {
         mkdirp(protoDir);
       }

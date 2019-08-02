@@ -32,7 +32,11 @@ describe('generator-effective:grpc', () => {
       });
     });
     it('generates pb js', () => {
-      assert.file(['helloworld_grpc_pb.js', 'helloworld_pb.js']);
+      assert.file([
+        'helloworld_grpc_pb.js',
+        'helloworld_pb.js',
+        'helloworld_pb.d.ts',
+      ]);
     });
   });
 
