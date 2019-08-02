@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/edvardchen/generator-effective/compare/v1.6.0...v1.7.0) (2019-08-02)
+
+
+### Bug Fixes
+
+* transfer outDir to absolute path ([3ccf336](https://github.com/edvardchen/generator-effective/commit/3ccf336))
+
+
+### Features
+
+* **grpc:** generate .d.ts using ts-protoc-gen ([fc08c2d](https://github.com/edvardchen/generator-effective/commit/fc08c2d))
+* add grpc ([bd4c0fc](https://github.com/edvardchen/generator-effective/commit/bd4c0fc))
+
+
+
 ## [1.6.0](https://github.com/edvardchen/generator-effective/compare/v1.5.0...v1.6.0) (2019-07-31)
 
 
