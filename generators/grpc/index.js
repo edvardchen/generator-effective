@@ -6,6 +6,7 @@ const globby = require('globby');
 const { spawn } = require('child_process');
 const yosay = require('yosay');
 const chalk = require('chalk');
+const pbLoader = require('@grpc/proto-loader');
 
 const Generator = require('../Base');
 
@@ -63,6 +64,59 @@ function globalInstall(pkg) {
   });
 }
 
+/**
+ * generate server implementation templates
+ * @this Generator
+ * @param {string[]} protos proto files
+ */
+function generateImplementationTemplates(protos) {
+  const protoDir = this.destinationPath(this.props.protoDir);
+  // const outDir = this.destinationPath(this.props.outDir);
+  protos.forEach(item => {
+    const serviceName = item.substring(0, item.indexOf('.proto'));
+    const serverDir = `src/${serviceName}`;
+    // create server directory
+    mkdirp(this.destinationPath(serverDir));
+
+    const def = pbLoader.loadSync(path.join(protoDir, item));
+
+    Object.values(def).forEach(item => {
+      if (item.type) {
+        // Message
+        return;
+      }
+
+      Object.values(item).forEach(
+        ({
+          originalName,
+          requestType: {
+            type: { name: requestType },
+          },
+          responseType: {
+            type: { name: responseType },
+          },
+          requestStream,
+          responseStream,
+        }) => {
+          if (!requestStream && !responseStream) {
+            const relatedPath = path.relative(serverDir, this.props.outDir);
+            this.fs.copyTpl(
+              this.templatePath('unaryCall.ts'),
+              this.destinationPath(`${serverDir}/${originalName}.ts`),
+              {
+                pbPath: `${relatedPath}/${serviceName}_pb`,
+                requestType,
+                responseType,
+                method: originalName,
+              }
+            );
+          }
+        }
+      );
+    });
+  });
+}
+
 module.exports = class extends Generator {
   prompting() {
     const prompts = [
@@ -94,6 +148,14 @@ module.exports = class extends Generator {
         },
         validate(value) {
           return value.length > 0;
+        },
+      },
+      {
+        type: 'confirm',
+        name: 'generateImplementationTemplates',
+        message: 'Would you like to generate serer implementation templates?',
+        when(answers) {
+          return answers.codegen === STATIC;
         },
       },
     ];
@@ -130,8 +192,8 @@ module.exports = class extends Generator {
       const protoDir = this.destinationPath(this.props.protoDir);
       if (fs.existsSync(protoDir)) {
         let { outDir } = this.props;
-        mkdirp(outDir);
         outDir = this.destinationPath(outDir);
+        mkdirp(outDir);
 
         const done = this.async();
 
@@ -144,6 +206,10 @@ module.exports = class extends Generator {
             await globalInstall.call(this, 'ts-protoc-gen');
           }
 
+          const protos = globby
+            .sync(protoDir + '/**/*.proto')
+            .map(item => path.basename(item));
+
           // grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./static_codegen/ --grpc_out=./static_codegen --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` protos/helloworld.proto
           const args = [
             `--js_out=import_style=commonjs,binary:${outDir}`,
@@ -151,9 +217,7 @@ module.exports = class extends Generator {
             `--grpc_out=${outDir}`,
             // `--plugin="protoc-gen-grpc=${pluginPath}"`,
             // '--plugin="protoc-gen-ts=${pluginPath}"',
-            ...globby
-              .sync(protoDir + '/**/*.proto')
-              .map(item => path.basename(item)),
+            ...protos,
           ];
 
           await new Promise((resolve, reject) => {
@@ -166,6 +230,10 @@ module.exports = class extends Generator {
               if (code === 0) resolve();
               else reject(code);
             });
+
+            if (this.props.generateImplementationTemplates) {
+              generateImplementationTemplates.call(this, protos);
+            }
           });
         })().finally(done);
       } else {

@@ -9,12 +9,11 @@ describe('generator-effective:grpc', () => {
     beforeAll(() => {
       const context = helpers
         .run(path.join(__dirname, '../generators/grpc'))
-        .inTmpDir(function(dir) {
+        .inTmpDir(function() {
           fs.writeFile('tsconfig.json', '{}', this.async());
-          context.withPrompts({
-            protoDir: path.join(__dirname, '/fixtures/protos'),
-            outDir: dir,
-          });
+        })
+        .withPrompts({
+          protoDir: path.join(__dirname, '/fixtures/protos'),
         });
       return context;
     });
@@ -32,11 +31,17 @@ describe('generator-effective:grpc', () => {
       });
     });
     it('generates pb js', () => {
-      assert.file([
-        'helloworld_grpc_pb.js',
-        'helloworld_pb.js',
-        'helloworld_pb.d.ts',
-      ]);
+      assert.file(
+        ['helloworld_grpc_pb.js', 'helloworld_pb.js', 'helloworld_pb.d.ts'].map(
+          item => `src/static_codegen/${item}`
+        )
+      );
+
+      assert.file(['src/helloworld/sayHello.ts']);
+      assert.fileContent(
+        'src/helloworld/sayHello.ts',
+        'export default function sayHello'
+      );
     });
   });
 
