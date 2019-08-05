@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/edvardchen/generator-effective/compare/v1.7.0...v1.8.0) (2019-08-05)
+
+
+### Bug Fixes
+
+* **et:** drop no-unused-vars ([55181f4](https://github.com/edvardchen/generator-effective/commit/55181f4))
+
+
+### Features
+
+* **grpc:** be able to generate server implementation template ([f0e166a](https://github.com/edvardchen/generator-effective/commit/f0e166a))
+* **grpc:** inject import and addService statements automatically ([f09b14d](https://github.com/edvardchen/generator-effective/commit/f09b14d))
+
+
+
 ## [1.7.0](https://github.com/edvardchen/generator-effective/compare/v1.6.0...v1.7.0) (2019-08-02)
 
 
