@@ -1,16 +1,16 @@
-import { handleUnaryCall } from 'grpc';
+import { handleServerStreamingCall } from 'grpc';
 import { <%= requestType %>, <%= responseType %> } from '<%= pbPath %>';
 
 /**
  * Implements the <%= method %> RPC method.
  */
-const <%= method %>: handleUnaryCall<<%= requestType %>, <%= responseType %>> = (
-  call,
-  callback
+const <%= method %>: handleServerStreamingCall<<%= requestType %>, <%= responseType %>> = (
+  call
 ) => {
   // const { request, metadata } = call;
   const reply = new <%= responseType %>();
-  callback(null, reply);
+  call.write(reply);
+  call.end();
 };
 
 export default <%= method %>;

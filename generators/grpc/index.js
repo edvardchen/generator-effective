@@ -85,18 +85,32 @@ function createSingleMethod(
   },
   { proto, implementationDir }
 ) {
-  if (!requestStream && !responseStream) {
-    const relatedPath = path.relative(implementationDir, this.props.outDir);
-    this.fs.copyTpl(
-      this.templatePath('unaryCall.ts'),
-      this.destinationPath(`${implementationDir}/${method}.ts`),
-      {
-        pbPath: `${relatedPath}/${proto}_pb`,
-        requestType,
-        responseType,
-        method,
-      }
-    );
+  const flag = requestStream * 2 + responseStream;
+  const dest = this.destinationPath(`${implementationDir}/${method}.ts`);
+  const relatedPath = path.relative(implementationDir, this.props.outDir);
+  const context = {
+    pbPath: `${relatedPath}/${proto}_pb`,
+    requestType,
+    responseType,
+    method,
+  };
+  let template;
+  switch (flag) {
+    case 0:
+      template = 'unaryCall.ts';
+      break;
+    case 1:
+      template = 'serverStreamingCall.ts';
+      break;
+    case 2:
+      template = 'clientStreamingCall.ts';
+      break;
+    default:
+      template = 'bidiStreamingCall.ts';
+      break;
+  }
+  if (template) {
+    this.fs.copyTpl(this.templatePath(template), dest, context);
   }
 }
 
