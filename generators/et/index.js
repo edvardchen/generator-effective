@@ -50,7 +50,6 @@ module.exports = class extends Generator {
         1,
         { allowExpressions: true, allowTypedFunctionExpressions: true },
       ],
-      'no-unused-vars': 0,
       '@typescript-eslint/no-unused-vars': [
         1,
         { argsIgnorePattern: '^_|ignore', varsIgnorePattern: '^_|ignore' },
