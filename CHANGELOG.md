@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/edvardchen/generator-effective/compare/v1.8.0...v1.9.0) (2019-08-05)
+
+
+### Features
+
+* **grpc:** ddd templates for non-unary calls ([90f652f](https://github.com/edvardchen/generator-effective/commit/90f652f))
+
+
+
 ## [1.8.0](https://github.com/edvardchen/generator-effective/compare/v1.7.0...v1.8.0) (2019-08-05)
 
 
