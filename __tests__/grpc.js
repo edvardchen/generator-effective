@@ -47,11 +47,14 @@ describe('generator-effective:grpc', () => {
     });
 
     it('generate server method implementation templates', () => {
-      assert.file(['src/Greeter/sayHello.ts']);
-      assert.fileContent(
+      assert.file([
+        // four kinds
         'src/Greeter/sayHello.ts',
-        'export default function sayHello'
-      );
+        'src/RouteGuide/listFeatures.ts',
+        'src/RouteGuide/recordRoute.ts',
+        'src/RouteGuide/routeChat.ts',
+      ]);
+      assert.fileContent('src/Greeter/sayHello.ts', 'export default sayHello');
     });
 
     it('import methods', () => {
