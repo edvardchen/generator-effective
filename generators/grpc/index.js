@@ -217,6 +217,7 @@ module.exports = class extends Generator {
         type: 'choice',
         name: 'codegen',
         choices: codegens,
+        store: true,
         message:
           'WHich way would you like to generate JavaScript file from proto file? Static codegen is easy to infer types.',
         default: STATIC,
@@ -225,6 +226,7 @@ module.exports = class extends Generator {
         name: 'protoDir',
         message: 'The directory of proto files:',
         default: 'protos',
+        store: true,
         when(answers) {
           return answers.codegen === STATIC;
         },
@@ -236,6 +238,7 @@ module.exports = class extends Generator {
         name: 'outDir',
         message: 'Output directory of generated files:',
         default: 'src/static_codegen',
+        store: true,
         when(answers) {
           return answers.codegen === STATIC;
         },
@@ -245,6 +248,7 @@ module.exports = class extends Generator {
       },
       {
         type: 'confirm',
+        store: true,
         name: 'generateImplementationTemplates',
         message: 'Would you like to generate serer implementation templates?',
         when(answers) {
