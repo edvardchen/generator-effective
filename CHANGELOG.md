@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/edvardchen/generator-effective/compare/v1.9.0...v1.10.0) (2019-08-06)
+
+
+### Build System
+
+* test before push or publish ([1e5e4cb](https://github.com/edvardchen/generator-effective/commit/1e5e4cb))
+
+
+### Features
+
+* **grpc:** store user answers ([619e150](https://github.com/edvardchen/generator-effective/commit/619e150))
+
+
+### Tests
+
+* **grpc:** check implementation method templates ([d64218f](https://github.com/edvardchen/generator-effective/commit/d64218f))
+
+
+
 ## [1.9.0](https://github.com/edvardchen/generator-effective/compare/v1.8.0...v1.9.0) (2019-08-05)
 
 
