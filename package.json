@@ -63,6 +63,7 @@
     ]
   },
   "scripts": {
+    "prepublish": "npm run test",
     "pretest": "eslint .",
     "test": "jest"
   },
@@ -70,6 +71,7 @@
   "license": "MIT",
   "husky": {
     "hooks": {
+      "pre-push": "npm run test",
       "pre-commit": "lint-staged"
     }
   }
