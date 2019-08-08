@@ -41,6 +41,7 @@ module.exports = class extends Generator {
       data = {
         ...data,
         scripts: {
+          prepublish: 'npm run build',
           build: 'tsc',
         },
       };
