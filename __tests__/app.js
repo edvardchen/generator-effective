@@ -1,16 +1,18 @@
 'use strict';
 const path = require('path');
-// const assert = require('yeoman-assert');
+const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 
 describe('generator-effective:app', () => {
   beforeAll(() => {
     return helpers
       .run(path.join(__dirname, '../generators/app'))
-      .withPrompts({ someAnswer: true });
+      .withPrompts({ public: false });
   });
 
-  it('creates files', () => {
-    // assert.file(['dummyfile.txt']);
+  it('prevent publishing', () => {
+    assert.jsonFileContent('package.json', {
+      private: true,
+    });
   });
 });

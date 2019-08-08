@@ -4,7 +4,10 @@ const helper = require('../helper');
 
 module.exports = class extends Generator {
   initializing() {
-    this.composeWith(require.resolve('../eslint'));
+    if (!this.options.internal) {
+      this.composeWith(require.resolve('../jest'));
+      this.composeWith(require.resolve('../eslint'));
+    }
   }
 
   writing() {}

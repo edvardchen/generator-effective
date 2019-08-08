@@ -3,8 +3,10 @@ const Generator = require('../Base');
 
 module.exports = class extends Generator {
   initializing() {
-    this.composeWith(require.resolve('../typescript'));
-    this.composeWith(require.resolve('../jest'));
+    if (!this.options.internal) {
+      this.composeWith(require.resolve('../typescript'));
+      this.composeWith(require.resolve('../jest'));
+    }
   }
 
   writing() {
