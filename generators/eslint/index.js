@@ -18,6 +18,10 @@ module.exports = class extends Generator {
       devDependencies: {
         eslint: '^5.9.0',
       },
+      scripts: {
+        lint: 'eslint src',
+        pretest: 'npm run lint',
+      },
       'lint-staged': {
         '*.{tsx,ts}': ['eslint'],
       },
