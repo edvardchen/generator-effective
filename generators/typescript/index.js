@@ -31,12 +31,22 @@ module.exports = class extends Generator {
       this.props
     );
 
-    this.fs.extendJSON(this.destinationPath('package.json'), {
+    let data = {
       devDependencies: {
         typescript: '^3.5.1',
         '@types/node': '^12.0.8',
       },
-    });
+    };
+    if (this.props.target === 'Node.js') {
+      data = {
+        ...data,
+        scripts: {
+          build: 'tsc',
+        },
+      };
+    }
+
+    this.fs.extendJSON(this.destinationPath('package.json'), data);
   }
 
   install() {

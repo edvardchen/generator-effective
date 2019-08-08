@@ -10,12 +10,21 @@ describe('generator-effective:typescript', () => {
       return helpers.run(generatorPath);
     });
 
-    it('creates files', () => {
-      assert.file(['tsconfig.json']);
+    it('set tsconfig', () => {
       assert.jsonFileContent('tsconfig.json', {
         compilerOptions: {
           target: 'esnext',
+          outDir: 'lib',
           declaration: true,
+        },
+        include: ['src'],
+      });
+    });
+
+    it('add build script', () => {
+      assert.jsonFileContent('package.json', {
+        scripts: {
+          build: 'tsc',
         },
       });
     });
@@ -28,8 +37,7 @@ describe('generator-effective:typescript', () => {
       });
     });
 
-    it('creates files', () => {
-      assert.file(['tsconfig.json']);
+    it('set tsconfig', () => {
       assert.jsonFileContent('tsconfig.json', {
         compilerOptions: { target: 'es6' },
       });

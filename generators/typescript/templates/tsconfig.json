@@ -3,9 +3,10 @@
     "target": "<%= target === 'Node.js' ? 'esnext' : 'es6' %>",
     "module": "commonjs",
     "lib": ["es2018", "dom"],
-    <% if ( target === 'Node.js'){ %>
+    <%_ if (target === 'Node.js'){ -%>
     "declaration": true,
-    <% } %>
+    "outDir": "lib",
+    <%_ } -%>
     "sourceMap": true,
     "strict": true,
     "noUnusedLocals": true,
@@ -20,5 +21,7 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
-  }
+  }<% if (target === 'Node.js'){ %>,
+  "include": ["src"]
+    <%_ } -%>
 }
