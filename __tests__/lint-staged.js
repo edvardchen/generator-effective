@@ -9,10 +9,16 @@ describe('generator-effective:lint-staged', () => {
   });
 
   it('creates files', () => {
-    assert.fileContent(
-      'package.json',
-      '"pre-commit": "lint-staged"',
-      '"lint-staged":'
-    );
+    assert.jsonFileContent('package.json', {
+      husky: {
+        hooks: {
+          'pre-commit': 'lint-staged',
+        },
+      },
+      devDependencies: {
+        husky: /.*/,
+        'lint-staged': /.*/,
+      },
+    });
   });
 });
