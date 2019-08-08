@@ -57,6 +57,13 @@ module.exports = class extends Generator {
     };
 
     helper.writeConfig(this, filepath, config);
+
+    // overwrite package lint script
+    this.fs.extendJSON(this.destinationPath('package.json'), {
+      scripts: {
+        lint: 'eslint src && tsc --noEmit',
+      },
+    });
   }
 
   install() {

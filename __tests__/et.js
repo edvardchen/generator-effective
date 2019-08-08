@@ -14,6 +14,21 @@ describe('generator-effective:et', () => {
     assert.file(['.eslintrc.yml', 'tsconfig.json']);
   });
 
+  it('add ts rules', () => {
+    assert.fileContent(
+      '.eslintrc.yml',
+      /plugin:@typescript-eslint\/recommended/
+    );
+  });
+
+  it('overwrite lint script', () => {
+    assert.jsonFileContent('package.json', {
+      scripts: {
+        lint: 'eslint src && tsc --noEmit',
+      },
+    });
+  });
+
   it('install deps', () => {
     assert.jsonFileContent('package.json', {
       devDependencies: {
@@ -21,10 +36,5 @@ describe('generator-effective:et', () => {
         '@typescript-eslint/parser': /.*/,
       },
     });
-
-    assert.fileContent(
-      '.eslintrc.yml',
-      /plugin:@typescript-eslint\/recommended/
-    );
   });
 });
