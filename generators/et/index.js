@@ -43,7 +43,10 @@ module.exports = class extends Generator {
       '@typescript-eslint/prefer-interface': 0,
       '@typescript-eslint/explicit-member-accessibility': [
         1,
-        { accessibility: 'no-public' },
+        {
+          accessibility: 'no-public',
+          overrides: { parameterProperties: 'explicit' },
+        },
       ],
       '@typescript-eslint/no-parameter-properties': 0,
       '@typescript-eslint/explicit-function-return-type': [
