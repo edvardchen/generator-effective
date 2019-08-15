@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/edvardchen/generator-effective/compare/v1.10.0...v1.11.0) (2019-08-15)
+
+
+### Bug Fixes
+
+* **app:** avoid to repeat typescript prompts ([eadc4c7](https://github.com/edvardchen/generator-effective/commit/eadc4c7))
+
+
+### Features
+
+* **et:** prevent explicit-member-accessibility from complain on param prop ([f5b6663](https://github.com/edvardchen/generator-effective/commit/f5b6663))
+* add common option internal ([bcccc29](https://github.com/edvardchen/generator-effective/commit/bcccc29))
+* **eslint:** add pretest and lint scripts ([e2e7830](https://github.com/edvardchen/generator-effective/commit/e2e7830))
+* **et:** lint codes with eslint and ts ([fb4893b](https://github.com/edvardchen/generator-effective/commit/fb4893b))
+* **husky:** add subgenerator husky ([309c578](https://github.com/edvardchen/generator-effective/commit/309c578))
+* **jest:** test before push ([f32851e](https://github.com/edvardchen/generator-effective/commit/f32851e))
+* **typescript:** build before publish ([297d1f3](https://github.com/edvardchen/generator-effective/commit/297d1f3))
+* **typescript:** set outDir, include and build script when target is Node.js ([19330a3](https://github.com/edvardchen/generator-effective/commit/19330a3))
+
+
+
 ## [1.10.0](https://github.com/edvardchen/generator-effective/compare/v1.9.0...v1.10.0) (2019-08-06)
 
 
