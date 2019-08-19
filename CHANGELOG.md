@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.1](https://github.com/edvardchen/generator-effective/compare/v1.12.0...v1.12.1) (2019-08-19)
+
+
+### Bug Fixes
+
+* **ept:** fix extends undefined error ([c0df94f](https://github.com/edvardchen/generator-effective/commit/c0df94f))
+
+
+
 ## [1.12.0](https://github.com/edvardchen/generator-effective/compare/v1.11.0...v1.12.0) (2019-08-19)
 
 
