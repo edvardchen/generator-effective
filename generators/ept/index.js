@@ -17,6 +17,7 @@ module.exports = class extends Generator {
       // filename in fs memory
       '.eslintrc.yml'
     );
+    helper.castToArray(config, 'extends');
     config.extends.push('prettier/@typescript-eslint');
 
     helper.writeConfig(this, filepath, config);
