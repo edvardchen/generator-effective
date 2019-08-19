@@ -160,7 +160,6 @@ function createMethodFiles({
 function generateImplementationTemplates(protos) {
   const protoDir = this.destinationPath(this.props.protoDir);
 
-  const entryFile = this.destinationPath('src/index.ts');
   this.props.imports = [];
   this.props.addServiceStatements = [];
 
@@ -191,23 +190,30 @@ function generateImplementationTemplates(protos) {
     }
   });
 
-  if (this.fs.exists(entryFile)) {
-    let content = this.fs.read(entryFile);
+  ['src/index.ts', 'src/server.ts'].some(item => {
+    const entryFile = this.destinationPath(item);
 
-    // inject import statements
-    content = content.replace(
-      /(\/\* BEGIN GRPC IMPORT \*\/)(\s+)[\s\S]*?(\/\* END \*\/)/m,
-      `$1$2${this.props.imports.join('$2')}$2$3`
-    );
+    if (this.fs.exists(entryFile)) {
+      let original = this.fs.read(entryFile);
 
-    // inject addService statements
-    content = content.replace(
-      /(\/\* BEGIN ADD SERVICE \*\/)(\s+)[\s\S]*?(\/\* END \*\/)/m,
-      `$1$2${this.props.addServiceStatements.join('$2')}$2$3`
-    );
+      // inject import statements
+      let content = original.replace(
+        /(\/\* BEGIN GRPC IMPORT \*\/)(\s+)[\s\S]*?(\/\* END \*\/)/m,
+        `$1$2${this.props.imports.join('$2')}$2$3`
+      );
 
-    this.fs.write(entryFile, content);
-  }
+      // inject addService statements
+      content = content.replace(
+        /(\/\* BEGIN ADD SERVICE \*\/)(\s+)[\s\S]*?(\/\* END \*\/)/m,
+        `$1$2${this.props.addServiceStatements.join('$2')}$2$3`
+      );
+
+      this.fs.write(entryFile, content);
+      // break if changed
+      return content !== original;
+    }
+    return false;
+  });
 }
 
 module.exports = class extends Generator {
