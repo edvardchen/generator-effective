@@ -32,7 +32,7 @@ module.exports = class extends Generator {
     };
     if (this.formatByEslint) {
       Object.assign(deps, {
-        'eslint-plugin-prettier': '^3.1.o',
+        'eslint-plugin-prettier': '^3.1.0',
       });
     }
     // add devDeps
