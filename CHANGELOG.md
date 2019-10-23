@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.2](https://github.com/edvardchen/generator-effective/compare/v1.12.1...v1.12.2) (2019-10-23)
+
+
+### Bug Fixes
+
+* **ep:** fix wrong version of eslint-plugin-prettier ([e7e29b5](https://github.com/edvardchen/generator-effective/commit/e7e29b5))
+
 ### [1.12.1](https://github.com/edvardchen/generator-effective/compare/v1.12.0...v1.12.1) (2019-08-19)
 
 
