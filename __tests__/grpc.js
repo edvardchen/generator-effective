@@ -45,6 +45,7 @@ describe('generator-effective:grpc', () => {
     });
 
     function createProjectFiles() {
+      console.log(arguments[0]);
       fs.mkdirSync('src');
       fs.writeFile(
         'src/index.ts',
@@ -55,15 +56,16 @@ describe('generator-effective:grpc', () => {
       fs.writeFile('tsconfig.json', '{}', this.async());
     }
 
-    describe('generate static files', () => {
+    describe.only('generate static files', () => {
       beforeAll(() => {
         const context = helpers
           .run(path.join(__dirname, '../generators/grpc'))
           .inTmpDir(createProjectFiles)
           .withPrompts({
             pbWillBeImplemented: [
-              path.join(__dirname, '/fixtures/protos/helloworld.proto'),
-              path.join(__dirname, '/fixtures/protos/route_guide.proto'),
+              // path.join(__dirname, '/fixtures/protos/helloworld.proto'),
+              // path.join(__dirname, '/fixtures/protos/route_guide.proto'),
+              path.join(__dirname, '/fixtures/protos/test_import.proto'),
             ],
             generateImplementationTemplates: true,
             protoDir: path.join(__dirname, '/fixtures/protos'),
@@ -80,30 +82,30 @@ describe('generator-effective:grpc', () => {
         );
       });
 
-      it('generate server method implementation templates', () => {
-        assert.file([
-          // four kinds
-          'src/Greeter/sayHello.ts',
-          'src/RouteGuide/listFeatures.ts',
-          'src/RouteGuide/recordRoute.ts',
-          'src/RouteGuide/routeChat.ts',
-        ]);
-        assert.fileContent(
-          'src/Greeter/sayHello.ts',
-          'export default sayHello'
-        );
-      });
+      // it('generate server method implementation templates', () => {
+      //   assert.file([
+      //     // four kinds
+      //     'src/Greeter/sayHello.ts',
+      //     'src/RouteGuide/listFeatures.ts',
+      //     'src/RouteGuide/recordRoute.ts',
+      //     'src/RouteGuide/routeChat.ts',
+      //   ]);
+      //   assert.fileContent(
+      //     'src/Greeter/sayHello.ts',
+      //     'export default sayHello'
+      //   );
+      // });
 
-      it('import methods', () => {
-        assert.fileContent(
-          'src/index.ts',
-          "import sayHello from './Greeter/sayHello';"
-        );
-        assert.fileContent(
-          'src/index.ts',
-          "import { GreeterService } from './static_codegen/helloworld_grpc_pb';"
-        );
-      });
+      // it('import methods', () => {
+      //   assert.fileContent(
+      //     'src/index.ts',
+      //     "import sayHello from './Greeter/sayHello';"
+      //   );
+      //   assert.fileContent(
+      //     'src/index.ts',
+      //     "import { GreeterService } from './static_codegen/helloworld_grpc_pb';"
+      //   );
+      // });
     });
   });
 

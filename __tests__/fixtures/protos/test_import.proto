@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "common.proto";
+import "google/protobuf/empty.proto";
+
+package test.import;
+
+service MockService {
+  rpc Greet(common.CommonObj) returns (google.protobuf.Empty) {}
+}
+
+message ImportMessage {}

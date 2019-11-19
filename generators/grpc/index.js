@@ -1,4 +1,7 @@
 'use strict';
+const {
+  FileDescriptorProto,
+} = require('google-protobuf/google/protobuf/descriptor_pb');
 const path = require('path');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
@@ -75,8 +78,10 @@ function createSingleMethod(
   {
     originalName: method,
     requestType: {
+      fileDescriptorProtos,
       type: { name: requestType },
     },
+    requestType: requestTypeObj,
     responseType: {
       type: { name: responseType },
     },
@@ -85,6 +90,14 @@ function createSingleMethod(
   },
   { proto, implementationDir }
 ) {
+  console.dir(requestTypeObj.type);
+  fileDescriptorProtos.forEach(item => {
+    console.log(
+      FileDescriptorProto.deserializeBinary(item).toObject()
+      // { depth: null }
+    );
+  });
+
   const flag = requestStream * 2 + responseStream;
   const dest = this.destinationPath(`${implementationDir}/${method}.ts`);
   const relatedPath = path.relative(implementationDir, this.props.outDir);

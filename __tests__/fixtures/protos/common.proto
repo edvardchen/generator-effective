@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package common;
+
+message CommonObj { int32 id = 1; }
