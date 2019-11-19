@@ -241,12 +241,24 @@ module.exports = class extends Generator {
         },
       },
       {
+        type: 'checkbox',
+        name: 'pbWillBeImplemented',
+        message: 'Which protos you like to implement?',
+        store: true,
+        when(answers) {
+          return answers.codegen === STATIC;
+        },
+        choices({ protoDir }) {
+          return globby.sync(protoDir + '/**/*.proto');
+        },
+      },
+      {
         name: 'outDir',
         message: 'Output directory of generated files:',
         default: 'src/static_codegen',
         store: true,
-        when(answers) {
-          return answers.codegen === STATIC;
+        when({ pbWillBeImplemented = [], codegen }) {
+          return codegen === STATIC && pbWillBeImplemented.length;
         },
         validate(value) {
           return value.length > 0;
@@ -257,8 +269,8 @@ module.exports = class extends Generator {
         store: true,
         name: 'generateImplementationTemplates',
         message: 'Would you like to generate serer implementation templates?',
-        when(answers) {
-          return answers.codegen === STATIC;
+        when({ pbWillBeImplemented = [], codegen }) {
+          return codegen === STATIC && pbWillBeImplemented.length;
         },
       },
     ];
@@ -273,10 +285,11 @@ module.exports = class extends Generator {
     // ─── DEPENDENCIES ────────────────────────────────────────────────
     //
 
+    const { codegen, pbWillBeImplemented = [] } = this.props;
     const dependencies = {
       grpc: '^1.22.2',
     };
-    if (this.props.codegen === STATIC) {
+    if (codegen === STATIC) {
       Object.assign(dependencies, {
         'google-protobuf': '^3.9.0',
       });
@@ -291,11 +304,10 @@ module.exports = class extends Generator {
     //
     // ─── CODEGEN ─────────────────────────────────────────────────────
     //
-    if (this.props.codegen === STATIC) {
+    if (codegen === STATIC && pbWillBeImplemented.length) {
       const protoDir = this.destinationPath(this.props.protoDir);
       if (fs.existsSync(protoDir)) {
-        let { outDir } = this.props;
-        outDir = this.destinationPath(outDir);
+        const outDir = this.destinationPath(this.props.outDir);
         mkdirp(outDir);
 
         const done = this.async();
@@ -309,9 +321,9 @@ module.exports = class extends Generator {
             await globalInstall.call(this, 'ts-protoc-gen');
           }
 
-          const protos = globby
-            .sync(protoDir + '/**/*.proto')
-            .map(item => path.basename(item));
+          const protos = this.props.pbWillBeImplemented.map(item =>
+            path.relative(protoDir, item)
+          );
 
           // grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./static_codegen/ --grpc_out=./static_codegen --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` protos/helloworld.proto
           const args = [
@@ -338,7 +350,9 @@ module.exports = class extends Generator {
               generateImplementationTemplates.call(this, protos);
             }
           });
-        })().finally(done);
+        })().then(done, error => {
+          throw error;
+        });
       } else {
         mkdirp(protoDir);
       }
