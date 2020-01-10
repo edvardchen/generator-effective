@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "target": "<%= target === 'Node.js' ? 'esnext' : 'es6' %>",
+    "target": "<%= target === 'Node.js' ? 'es2019' : 'es6' %>",
     "module": "commonjs",
-    "lib": ["es2018", "dom"],
     <%_ if (target === 'Node.js'){ -%>
+    "lib": ["es2019"],
     "declaration": true,
     "outDir": "lib",
+    <%_ } else { -%>
+    "lib": ["es2019", "dom"],
     <%_ } -%>
     "sourceMap": true,
     "strict": true,

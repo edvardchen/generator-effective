@@ -33,7 +33,7 @@ module.exports = class extends Generator {
 
     let data = {
       devDependencies: {
-        typescript: '^3.5.1',
+        typescript: '^3.7.4',
         '@types/node': '^12.0.8',
       },
     };
