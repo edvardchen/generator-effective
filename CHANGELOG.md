@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0](https://github.com/edvardchen/generator-effective/compare/v1.13.0...v1.14.0) (2020-01-10)
+
+
+### Features
+
+* **typescript:** enable optional chaining ([1837b9f](https://github.com/edvardchen/generator-effective/commit/1837b9f))
+
 ## [1.13.0](https://github.com/edvardchen/generator-effective/compare/v1.12.2...v1.13.0) (2019-11-20)
 
 
