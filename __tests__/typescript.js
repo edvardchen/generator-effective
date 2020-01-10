@@ -13,7 +13,7 @@ describe('generator-effective:typescript', () => {
     it('set tsconfig', () => {
       assert.jsonFileContent('tsconfig.json', {
         compilerOptions: {
-          target: 'esnext',
+          target: 'es2019',
           outDir: 'lib',
           declaration: true,
         },
@@ -39,7 +39,10 @@ describe('generator-effective:typescript', () => {
 
     it('set tsconfig', () => {
       assert.jsonFileContent('tsconfig.json', {
-        compilerOptions: { target: 'es6' },
+        compilerOptions: {
+          target: 'es6',
+          lib: ['es2019', 'dom'],
+        },
       });
       assert.noJsonFileContent('tsconfig.json', {
         compilerOptions: { declaration: true },
