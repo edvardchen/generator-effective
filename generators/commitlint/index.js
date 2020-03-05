@@ -8,7 +8,7 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    this.fs.writeJSON(this.destinationPath('package.json'), {
+    this.fs.extendJSON(this.destinationPath('package.json'), {
       devDependencies: {
         '@commitlint/cli': '^8.1.0',
         '@commitlint/config-conventional': '^7.5.0',
