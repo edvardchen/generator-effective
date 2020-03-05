@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.15.0](https://github.com/edvardchen/generator-effective/compare/v1.13.0...v1.15.0) (2020-03-05)
+
+
+### Bug Fixes
+
+* **commitlint:** use extendJSON over writeJSON ([a3cad51](https://github.com/edvardchen/generator-effective/commit/a3cad51))
+
+
+### Features
+
+* **typescript:** enable optional chaining ([112c443](https://github.com/edvardchen/generator-effective/commit/112c443))
+
 ## [1.14.0](https://github.com/edvardchen/generator-effective/compare/v1.13.0...v1.14.0) (2020-01-10)
 
 
