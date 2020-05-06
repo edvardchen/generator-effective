@@ -26,7 +26,11 @@ module.exports = class extends Generator {
     const configPath = this.destinationPath('jest.config.js');
     let content = this.fs.read(configPath);
 
-    content = content.replace(/.*preset:(.*)/, "preset: 'ts-jest',");
+    content = content.replace(/\/\/ preset:.*/, "preset: 'ts-jest',");
+    content = content.replace(
+      /\/\/ globals: {},/,
+      "globals: { 'ts-jest': { tsConfig: './tsconfig.test.json', }, },"
+    );
 
     this.fs.write(configPath, content);
     // ─────────────────────────────────────────────────────────────────
@@ -35,13 +39,10 @@ module.exports = class extends Generator {
     // ─── TSCONFIG ────────────────────────────────────────────────────
     //
 
-    const tsconfigPath = this.destinationPath('tsconfig.json');
-    const { types } = this.fs.readJSON(tsconfigPath).compilerOptions;
-    this.fs.extendJSON(tsconfigPath, {
-      compilerOptions: {
-        types: [...types, 'jest'],
-      },
-    });
+    this.fs.copy(
+      this.templatePath('tsconfig.test.json'),
+      this.destinationPath('tsconfig.test.json')
+    );
     // ─────────────────────────────────────────────────────────────────
   }
 

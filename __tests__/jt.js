@@ -10,7 +10,8 @@ describe('generator-effective:jt', () => {
 
   it('creates files', () => {
     assert.fileContent('jest.config.js', "preset: 'ts-jest',");
-    assert.jsonFileContent('tsconfig.json', {
+    assert.fileContent('jest.config.js', "tsConfig: './tsconfig.test.json'");
+    assert.jsonFileContent('tsconfig.test.json', {
       compilerOptions: {
         types: ['node', 'jest'],
       },
