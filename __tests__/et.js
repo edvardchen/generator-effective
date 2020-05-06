@@ -24,7 +24,7 @@ describe('generator-effective:et', () => {
   it('overwrite lint script', () => {
     assert.jsonFileContent('package.json', {
       scripts: {
-        lint: 'eslint src && tsc --noEmit',
+        lint: 'eslint src --ext ts,tsx && tsc --noEmit',
       },
     });
   });

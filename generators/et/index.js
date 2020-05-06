@@ -64,7 +64,10 @@ module.exports = class extends Generator {
     // overwrite package lint script
     this.fs.extendJSON(this.destinationPath('package.json'), {
       scripts: {
-        lint: 'eslint src && tsc --noEmit',
+        lint: 'eslint src --ext ts,tsx && tsc --noEmit',
+      },
+      'lint-staged': {
+        '*.{tsx,ts}': ['eslint'],
       },
     });
   }

@@ -22,9 +22,6 @@ module.exports = class extends Generator {
         lint: 'eslint src',
         pretest: 'npm run lint',
       },
-      'lint-staged': {
-        '*.{tsx,ts}': ['eslint'],
-      },
     });
   }
 

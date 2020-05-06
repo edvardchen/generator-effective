@@ -15,14 +15,6 @@ describe('generator-effective:eslint', () => {
       assert.file(['.eslintrc.yml']);
     });
 
-    it('eslint before commit', () => {
-      assert.jsonFileContent('package.json', {
-        'lint-staged': {
-          '*.{tsx,ts}': ['eslint'],
-        },
-      });
-    });
-
     it('add lint script', () => {
       assert.jsonFileContent('package.json', {
         scripts: {
