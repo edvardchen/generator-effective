@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/edvardchen/generator-effective/compare/v1.15.0...v1.16.0) (2020-05-06)
+
+
+### Features
+
+* **et:** lint ts,tsx files when pre-commit ([16e015c](https://github.com/edvardchen/generator-effective/commit/16e015c))
+* **jt:** create tsconfig.test.json ([8cb45fd](https://github.com/edvardchen/generator-effective/commit/8cb45fd))
+
 ## [1.15.0](https://github.com/edvardchen/generator-effective/compare/v1.13.0...v1.15.0) (2020-03-05)
 
 
