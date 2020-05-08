@@ -49,10 +49,7 @@ module.exports = class extends Generator {
         },
       ],
       '@typescript-eslint/no-parameter-properties': 0,
-      '@typescript-eslint/explicit-function-return-type': [
-        1,
-        { allowExpressions: true, allowTypedFunctionExpressions: true },
-      ],
+      '@typescript-eslint/explicit-function-return-type': 0,
       '@typescript-eslint/no-unused-vars': [
         1,
         { argsIgnorePattern: '^_|ignore', varsIgnorePattern: '^_|ignore' },
